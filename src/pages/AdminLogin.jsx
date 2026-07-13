@@ -22,7 +22,7 @@ function AdminLogin() {
       }
       localStorage.setItem('auth_token', data.token)
       login({ id: data.id, name: data.name, email: data.email, role: data.role })
-      window.location.hash = '#admin-dashboard'
+      setTimeout(() => { window.location.hash = '#admin-dashboard' }, 100)
     } catch (err) {
       setError(err.message)
       setSubmitted(false)

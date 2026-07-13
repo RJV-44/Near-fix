@@ -1,4 +1,35 @@
+import { useState, useEffect } from 'react'
 import CustomerLayout from '../components/CustomerLayout.jsx'
-const bookings = [['Deep home cleaning', 'Priya Home Care', '16 July 2026 Â· 10:00 AM', 'Confirmed'], ['Electrical repair', 'FixIt Electricals', '19 July 2026 Â· 2:30 PM', 'Pending']]
-function Bookings() { return <CustomerLayout title="My Bookings" subtitle="Review and manage your upcoming services."><section className="booking-list customer-booking-list">{bookings.map(([service, provider, time, status]) => <article className="booking-card customer-booking-card" key={service}><div className="booking-icon">{service.startsWith('Deep') ? '??' : '?'}</div><div><strong>{service}</strong><p>{provider}</p><small>{time}</small></div><div><span className={`status status-${status.toLowerCase()}`}>{status}</span><button className="text-button">Manage</button></div></article>)}</section></CustomerLayout> }
+import { bookingAPI } from '../../api.js'
+
+function Bookings() {
+  const [bookings, setBookings] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    bookingAPI.getAll()
+      .then(data => setBookings(data))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  return <CustomerLayout title="My Bookings" subtitle="Review and manage your upcoming services.">
+    <section className="booking-list customer-booking-list">
+      {loading ? <p>Loading...</p> :
+       bookings.length === 0 ? <p>No bookings yet.</p> :
+       bookings.map(b => <article className="booking-card customer-booking-card" key={b.id}>
+         <div className="booking-icon">??</div>
+         <div>
+           <strong>{b.service?.title || 'Service'}</strong>
+           <p>{b.provider?.businessName || b.provider?.name || 'Provider'}</p>
+           <small>{b.date} {b.time}</small>
+         </div>
+         <div>
+           <span className={`status status-${b.status?.toLowerCase() || 'pending'}`}>{b.status || 'Pending'}</span>
+           <button className="text-button">Manage</button>
+         </div>
+       </article>)}
+    </section>
+  </CustomerLayout>
+}
 export default Bookings

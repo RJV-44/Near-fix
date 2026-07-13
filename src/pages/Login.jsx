@@ -21,7 +21,7 @@ function Login() {
       localStorage.setItem('auth_token', data.token)
       login({ id: data.id, name: data.name, email: data.email, role: data.role })
       const dash = data.role === 'admin' ? '#admin-dashboard' : data.role === 'provider' ? '#provider-dashboard' : '#customer-dashboard'
-      window.location.hash = dash
+      setTimeout(() => { window.location.hash = dash }, 100)
     } catch (err) {
       setError(err.message)
       setSubmitted(false)

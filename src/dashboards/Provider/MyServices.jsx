@@ -1,4 +1,32 @@
+import { useState, useEffect } from 'react'
 import ProviderLayout from '../components/ProviderLayout.jsx'
-const services = [['Deep home cleaning', 'From $89 Â· 3 hours', 'Active'], ['Move-out cleaning', 'From $160 Â· 5 hours', 'Active'], ['Kitchen deep clean', 'From $55 Â· 2 hours', 'Draft']]
-function MyServices() { return <ProviderLayout title="My Services" subtitle="Create and manage the services you offer."><section className="panel"><div className="panel-heading"><div><h2>Service listings</h2><p>{services.length} services in your catalogue.</p></div><button className="primary-button">+ Add service</button></div><div className="service-grid">{services.map(([name, price, status]) => <article className="service-card" key={name}><span className={`status status-${status.toLowerCase()}`}>{status}</span><h3>{name}</h3><p>{price}</p><button className="text-button">Edit service</button></article>)}</div></section></ProviderLayout> }
+import { serviceAPI } from '../../api.js'
+
+function MyServices() {
+  const [services, setServices] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    serviceAPI.getAll()
+      .then(data => setServices(data))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  return <ProviderLayout title="My Services" subtitle="Create and manage the services you offer.">
+    <section className="panel">
+      <div className="panel-heading"><div><h2>Service listings</h2><p>{services.length} services in your catalogue.</p></div><a className="primary-button" href="#provider-add-service">+ Add service</a></div>
+      <div className="service-grid">
+        {loading ? <p>Loading...</p> :
+         services.length === 0 ? <p>No services yet.</p> :
+         services.map(s => <article className="service-card" key={s.id}>
+           <span className={`status status-${s.isActive ? 'active' : 'draft'}`}>{s.isActive ? 'Active' : 'Draft'}</span>
+           <h3>{s.title}</h3>
+           <p>From ${parseFloat(s.price).toFixed(0)} · {s.duration || '—'}</p>
+           <a className="text-button" href={`#provider-edit-service?id=${s.id}`}>Edit service</a>
+         </article>)}
+      </div>
+    </section>
+  </ProviderLayout>
+}
 export default MyServices

@@ -32,7 +32,7 @@ function ProviderRegister() {
       })
       localStorage.setItem('auth_token', data.token)
       login({ id: data.id, name: data.name, email: data.email, role: data.role })
-      window.location.hash = '#provider-dashboard'
+      setTimeout(() => { window.location.hash = '#provider-dashboard' }, 100)
     } catch (err) {
       setError(err.message)
       setSubmitted(false)

@@ -1,3 +1,23 @@
 import ProviderLayout from '../components/ProviderLayout.jsx'
-function Profile() { return <ProviderLayout title="Business Profile" subtitle="Manage how customers see your business."><section className="panel profile-panel"><div className="avatar">PH</div><div><h2>Priya Home Care</h2><p>Verified provider Â· Home cleaning</p></div><hr /><form className="profile-form"><label>Business name<input defaultValue="Priya Home Care" /></label><label>Business email<input type="email" defaultValue="hello@priyahomecare.com" /></label><label>Phone number<input defaultValue="+1 555 010 0121" /></label><label>Business description<textarea defaultValue="Reliable, detail-oriented home cleaning for busy households." /></label><button className="primary-button" type="button">Save profile</button></form></section></ProviderLayout> }
+import { useAuth } from '../../context/AuthContext'
+
+function Profile() {
+  const { user } = useAuth()
+  const initials = user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'PR'
+
+  return <ProviderLayout title="Business Profile" subtitle="Manage how customers see your business.">
+    <section className="panel profile-panel">
+      <div className="avatar">{initials}</div>
+      <div><h2>{user?.businessName || user?.name || 'Provider'}</h2><p>Verified provider · {user?.serviceCategory || 'Service provider'}</p></div>
+      <hr />
+      <form className="profile-form">
+        <label>Business name<input defaultValue={user?.businessName || ''} /></label>
+        <label>Business email<input type="email" defaultValue={user?.email || ''} /></label>
+        <label>Phone number<input defaultValue={user?.phone || ''} /></label>
+        <label>Business description<textarea defaultValue="Reliable, professional service provider." /></label>
+        <button className="primary-button" type="button">Save profile</button>
+      </form>
+    </section>
+  </ProviderLayout>
+}
 export default Profile

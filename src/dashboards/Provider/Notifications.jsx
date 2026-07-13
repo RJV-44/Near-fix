@@ -1,5 +1,50 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ProviderLayout from '../components/ProviderLayout.jsx'
-const initial = [{ id: 1, title: 'New booking request', text: 'Noah Williams requested Move-out cleaning for 16 July.', time: '5 minutes ago', unread: true }, { id: 2, title: 'Payment received', text: 'You received $89.00 for Deep home cleaning.', time: '1 day ago', unread: true }, { id: 3, title: 'New review', text: 'Sophia Patel left you a five-star review.', time: '2 days ago', unread: false }]
-function Notifications() { const [items, setItems] = useState(initial); return <ProviderLayout title="Notifications" subtitle="Keep up with bookings, earnings, and customer activity."><section className="panel"><div className="panel-heading"><div><h2>Recent notifications</h2><p>{items.filter((item) => item.unread).length} unread notifications</p></div><button className="text-button" onClick={() => setItems((list) => list.map((item) => ({ ...item, unread: false })))}>Mark all as read</button></div><div className="notification-list">{items.map((item) => <article className={`notification-item ${item.unread ? 'unread' : ''}`} key={item.id}><span>??</span><div><strong>{item.title}</strong><p>{item.text}</p><small>{item.time}</small></div></article>)}</div></section></ProviderLayout> }
+import { notificationAPI } from '../../api.js'
+
+function Notifications() {
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    notificationAPI.getAll()
+      .then(data => setItems(data))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  const markAllRead = async () => {
+    try {
+      await notificationAPI.markAllAsRead()
+      setItems(items.map(n => ({ ...n, isRead: true })))
+    } catch (e) {}
+  }
+
+  const markRead = async (id) => {
+    try {
+      await notificationAPI.markAsRead(id)
+      setItems(items.map(n => n.id === id ? { ...n, isRead: true } : n))
+    } catch (e) {}
+  }
+
+  const unreadCount = items.filter(n => !n.isRead).length
+
+  return <ProviderLayout title="Notifications" subtitle="Keep up with bookings, earnings, and customer activity.">
+    <section className="panel">
+      <div className="panel-heading"><div><h2>Recent notifications</h2><p>{unreadCount} unread notifications</p></div><button className="text-button" onClick={markAllRead}>Mark all as read</button></div>
+      <div className="notification-list">
+        {loading ? <p>Loading...</p> :
+         items.length === 0 ? <p>No notifications yet.</p> :
+         items.map(item => <article className={`notification-item ${!item.isRead ? 'unread' : ''}`} key={item.id} onClick={() => markRead(item.id)}>
+           <span>??</span>
+           <div>
+             <strong>{item.title}</strong>
+             <p>{item.message}</p>
+             <small>{new Date(item.createdAt).toLocaleDateString()}</small>
+           </div>
+         </article>)}
+      </div>
+    </section>
+  </ProviderLayout>
+}
 export default Notifications

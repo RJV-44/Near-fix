@@ -68,7 +68,7 @@ const providerRoutes = {
 const allRoutes = { ...publicRoutes, ...adminRoutes, ...customerRoutes, ...providerRoutes }
 
 function Router() {
-  const { isAuthenticated, user } = useAuth()
+  const { isAuthenticated, user, loading } = useAuth()
   const [hash, setHash] = useState(window.location.hash || '#home')
 
   useEffect(() => {
@@ -76,6 +76,9 @@ function Router() {
     window.addEventListener('hashchange', updateRoute)
     return () => window.removeEventListener('hashchange', updateRoute)
   }, [])
+
+  // Wait for auth check before rendering protected routes
+  if (loading) return null
 
   const Page = allRoutes[hash]
 

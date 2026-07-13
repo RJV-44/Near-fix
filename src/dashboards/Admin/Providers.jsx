@@ -1,4 +1,33 @@
+import { useState, useEffect } from 'react'
 import AdminLayout from '../components/AdminLayout.jsx'
-const providers = [['Priya Home Care', 'Cleaning', '4.9', 'Verified'], ['FixIt Electricals', 'Electrical', '4.8', 'Verified'], ['Quick AC Service', 'Appliance repair', '4.6', 'Pending']]
-function Providers() { return <AdminLayout title="Providers" subtitle="Review service provider profiles and verification."><section className="panel"><div className="panel-heading"><div><h2>Service providers</h2><p>Approve, suspend, or review providers.</p></div><button className="primary-button">+ Add provider</button></div><div className="table-wrap"><table><thead><tr><th>Provider</th><th>Category</th><th>Rating</th><th>Verification</th><th /></tr></thead><tbody>{providers.map(([name, category, rating, status]) => <tr key={name}><td><strong>{name}</strong></td><td>{category}</td><td>? {rating}</td><td><span className={`status status-${status.toLowerCase()}`}>{status}</span></td><td><button className="text-button">Review</button></td></tr>)}</tbody></table></div></section></AdminLayout> }
+import { userAPI } from '../../api.js'
+
+function Providers() {
+  const [providers, setProviders] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    userAPI.getAll({ role: 'provider' })
+      .then(data => setProviders(data))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  return <AdminLayout title="Providers" subtitle="Review service provider profiles and verification.">
+    <section className="panel">
+      <div className="panel-heading"><div><h2>Service providers</h2><p>{providers.length} providers registered</p></div></div>
+      <div className="table-wrap"><table><thead><tr><th>Provider</th><th>Category</th><th>Business</th><th>Status</th><th /></tr></thead><tbody>
+        {loading ? <tr><td colSpan="5">Loading...</td></tr> :
+         providers.length === 0 ? <tr><td colSpan="5">No providers found.</td></tr> :
+         providers.map(p => <tr key={p.id}>
+           <td><strong>{p.name}</strong></td>
+           <td>{p.serviceCategory || '—'}</td>
+           <td>{p.businessName || '—'}</td>
+           <td><span className={`status status-${p.isActive ? 'verified' : 'suspended'}`}>{p.isActive ? 'Active' : 'Suspended'}</span></td>
+           <td><button className="text-button" onClick={async () => { try { await userAPI.toggleStatus(p.id); setProviders(providers.map(x => x.id === p.id ? {...x, isActive: !x.isActive} : x)) } catch(e) { alert(e.message) } }}>{p.isActive ? 'Suspend' : 'Activate'}</button></td>
+         </tr>)}
+      </tbody></table></div>
+    </section>
+  </AdminLayout>
+}
 export default Providers
