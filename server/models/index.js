@@ -53,3 +53,5 @@ Payout.belongsTo(User, { foreignKey: 'providerId', as: 'provider' })
 Category.hasMany(Service, { foreignKey: 'categoryId', as: 'services' })
 
 
+
+module.exports = { User, Service, Booking, Review, Payment, Notification, Favorite, Category, Payout }

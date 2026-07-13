@@ -77,6 +77,16 @@ function Router() {
     return () => window.removeEventListener('hashchange', updateRoute)
   }, [])
 
+  // When user becomes authenticated, redirect to their dashboard if still on login
+  useEffect(() => {
+    if (isAuthenticated && user && (hash === '#login' || hash === '#admin-login')) {
+      const dash = user.role === 'admin' ? '#admin-dashboard'
+        : user.role === 'provider' ? '#provider-dashboard'
+        : '#customer-dashboard'
+      window.location.hash = dash
+    }
+  }, [isAuthenticated, user, hash])
+
   // Wait for auth check before rendering protected routes
   if (loading) return null
 
@@ -89,7 +99,6 @@ function Router() {
 
   // Public routes - always accessible
   if (publicRoutes[hash]) return <Page />
-
   // Protected routes - check authentication
   if (!isAuthenticated) {
     window.location.hash = '#login'

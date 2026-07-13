@@ -15,7 +15,7 @@ function Reviews() {
 
   return <AdminLayout title="Reviews" subtitle="Moderate customer feedback and provider responses.">
     <section className="panel">
-      <div className="panel-heading"><div><h2>Recent reviews</h2><p>{reviews.length} reviews total</p></div>
+      <div className="panel-heading"><div><h2>Recent reviews</h2><p>{reviews.length} reviews total</p></div></div>
       <div className="review-list">
         {loading ? <p>Loading...</p> :
          reviews.length === 0 ? <p>No reviews yet.</p> :

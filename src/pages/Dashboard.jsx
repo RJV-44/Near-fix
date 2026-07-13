@@ -8,7 +8,7 @@ function Dashboard() {
 
   const dashboards = [
     ['Admin portal', 'Manage users, providers, bookings, and platform reports.', '#admin-dashboard', '???'],
-    ['Customer portal', 'Manage your profile, bookings, payments, and favourite providers.', '#customer-dashboard', '??'],
+    ['Customer portal', 'Manage your profile, bookings, payments, and favorite providers.', '#customer-dashboard', '??'],
     ['Provider portal', 'Manage services, schedule, earnings, and customer reviews.', '#provider-dashboard', '??'],
   ]
 

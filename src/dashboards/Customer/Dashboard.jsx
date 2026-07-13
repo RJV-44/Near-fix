@@ -15,7 +15,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [bookings, favs] = await Promise.all([
+        const [bookings, favoritesData] = await Promise.all([
           bookingAPI.getAll(),
           favoriteAPI.getAll(),
         ])
@@ -23,7 +23,7 @@ function Dashboard() {
         const completedB = bookings.filter(b => b.status === 'completed')
         setUpcoming(upcomingB.length)
         setCompleted(completedB.length)
-        setFavorites(favs.length)
+        setFavorites(favoritesData.length)
         if (upcomingB.length > 0) setNextBooking(upcomingB[0])
       } catch (err) {
         console.error(err)
@@ -38,7 +38,7 @@ function Dashboard() {
     <section className="stat-grid customer-stats">
       <StatCard icon="??" label="Upcoming bookings" value={upcoming.toString()} />
       <StatCard icon="?" label="Completed services" value={completed.toString()} />
-      <StatCard icon="?" label="Favourite providers" value={favorites.toString()} />
+<StatCard icon="?" label="Favorite providers" value={favorites.toString()} />
     </section>
     <section className="panel">
       <div className="panel-heading"><div><h2>Upcoming booking</h2><p>Your next confirmed service.</p></div><a className="primary-button" href="#customer-bookings">View booking</a></div>
