@@ -1,4 +1,4 @@
-const { Service, User } = require('../models')
+const { Service, User, Category } = require('../models')
 
 const getServices = async (req, res) => {
   try {
@@ -24,8 +24,8 @@ const getServiceById = async (req, res) => {
 
 const createService = async (req, res) => {
   try {
-    const { title, category, description, price, duration } = req.body
-    const service = await Service.create({ providerId: req.user.id, title, category, description, price, duration })
+    const { title, category, categoryId, description, price, duration } = req.body
+    const service = await Service.create({ providerId: req.user.id, title, category, categoryId, description, price, duration })
     res.status(201).json(service)
   } catch (error) {
     res.status(500).json({ message: error.message })
