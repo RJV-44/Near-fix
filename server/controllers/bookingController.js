@@ -1,15 +1,19 @@
-const Booking = require('../models/Booking')
+const { Booking, User, Service } = require('../models')
 
 const getBookings = async (req, res) => {
   try {
-    let bookings
-    if (req.user.role === 'customer') {
-      bookings = await Booking.find({ customer: req.user._id }).populate('provider', 'name businessName').populate('service', 'title price')
-    } else if (req.user.role === 'provider') {
-      bookings = await Booking.find({ provider: req.user._id }).populate('customer', 'name email').populate('service', 'title price')
-    } else {
-      bookings = await Booking.find({}).populate('customer', 'name').populate('provider', 'name businessName').populate('service', 'title')
-    }
+    let where = {}
+    if (req.user.role === 'customer') where.customerId = req.user.id
+    else if (req.user.role === 'provider') where.providerId = req.user.id
+    const bookings = await Booking.findAll({
+      where,
+      include: [
+        { model: User, as: 'customer', attributes: ['id', 'name', 'email'] },
+        { model: User, as: 'provider', attributes: ['id', 'name', 'businessName'] },
+        { model: Service, as: 'service', attributes: ['id', 'title', 'price'] },
+      ],
+      order: [['createdAt', 'DESC']],
+    })
     res.json(bookings)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -18,7 +22,13 @@ const getBookings = async (req, res) => {
 
 const getBookingById = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id).populate('customer', 'name email phone').populate('provider', 'name businessName phone').populate('service', 'title price description')
+    const booking = await Booking.findByPk(req.params.id, {
+      include: [
+        { model: User, as: 'customer', attributes: ['id', 'name', 'email', 'phone'] },
+        { model: User, as: 'provider', attributes: ['id', 'name', 'businessName', 'phone'] },
+        { model: Service, as: 'service', attributes: ['id', 'title', 'price', 'description'] },
+      ],
+    })
     if (!booking) return res.status(404).json({ message: 'Booking not found' })
     res.json(booking)
   } catch (error) {
@@ -28,8 +38,8 @@ const getBookingById = async (req, res) => {
 
 const createBooking = async (req, res) => {
   try {
-    const { provider, service, date, time, address, notes, totalPrice } = req.body
-    const booking = await Booking.create({ customer: req.user._id, provider, service, date, time, address, notes, totalPrice })
+    const { providerId, serviceId, date, time, address, notes, totalPrice } = req.body
+    const booking = await Booking.create({ customerId: req.user.id, providerId, serviceId, date, time, address, notes, totalPrice })
     res.status(201).json(booking)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -38,12 +48,12 @@ const createBooking = async (req, res) => {
 
 const updateBookingStatus = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id)
+    const booking = await Booking.findByPk(req.params.id)
     if (!booking) return res.status(404).json({ message: 'Booking not found' })
-    booking.status = req.body.status || booking.status
-    booking.paymentStatus = req.body.paymentStatus || booking.paymentStatus
-    const updated = await booking.save()
-    res.json(updated)
+    if (req.body.status) booking.status = req.body.status
+    if (req.body.paymentStatus) booking.paymentStatus = req.body.paymentStatus
+    await booking.save()
+    res.json(booking)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

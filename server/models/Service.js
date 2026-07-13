@@ -1,16 +1,18 @@
-const mongoose = require('mongoose')
+const { DataTypes } = require('sequelize')
+const { sequelize } = require('../config/db')
 
-const serviceSchema = mongoose.Schema({
-  provider: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  title: { type: String, required: true },
-  category: { type: String, required: true },
-  description: { type: String, required: true },
-  price: { type: Number, required: true },
-  duration: { type: String },
-  image: { type: String },
-  isActive: { type: Boolean, default: true },
-  rating: { type: Number, default: 0 },
-  reviewCount: { type: Number, default: 0 },
+const Service = sequelize.define('Service', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  providerId: { type: DataTypes.INTEGER, allowNull: false },
+  title: { type: DataTypes.STRING, allowNull: false },
+  category: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT, allowNull: false },
+  price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+  duration: { type: DataTypes.STRING },
+  image: { type: DataTypes.STRING },
+  isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
+  rating: { type: DataTypes.DECIMAL(2, 1), defaultValue: 0 },
+  reviewCount: { type: DataTypes.INTEGER, defaultValue: 0 },
 }, { timestamps: true })
 
-module.exports = mongoose.model('Service', serviceSchema)
+module.exports = Service

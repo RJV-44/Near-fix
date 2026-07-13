@@ -1,11 +1,11 @@
-const Service = require('../models/Service')
+const { Service, User } = require('../models')
 
 const getServices = async (req, res) => {
   try {
-    const filter = { isActive: true }
-    if (req.query.category) filter.category = req.query.category
-    if (req.query.provider) filter.provider = req.query.provider
-    const services = await Service.find(filter).populate('provider', 'name businessName rating')
+    const where = { isActive: true }
+    if (req.query.category) where.category = req.query.category
+    if (req.query.provider) where.providerId = req.query.provider
+    const services = await Service.findAll({ where, include: [{ model: User, as: 'provider', attributes: ['id', 'name', 'businessName', 'rating'] }] })
     res.json(services)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -14,7 +14,7 @@ const getServices = async (req, res) => {
 
 const getServiceById = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id).populate('provider', 'name businessName email phone rating')
+    const service = await Service.findByPk(req.params.id, { include: [{ model: User, as: 'provider', attributes: ['id', 'name', 'businessName', 'email', 'phone', 'rating'] }] })
     if (!service) return res.status(404).json({ message: 'Service not found' })
     res.json(service)
   } catch (error) {
@@ -25,7 +25,7 @@ const getServiceById = async (req, res) => {
 const createService = async (req, res) => {
   try {
     const { title, category, description, price, duration } = req.body
-    const service = await Service.create({ provider: req.user._id, title, category, description, price, duration })
+    const service = await Service.create({ providerId: req.user.id, title, category, description, price, duration })
     res.status(201).json(service)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -34,13 +34,13 @@ const createService = async (req, res) => {
 
 const updateService = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id)
+    const service = await Service.findByPk(req.params.id)
     if (!service) return res.status(404).json({ message: 'Service not found' })
-    if (service.provider.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (service.providerId !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Not authorized' })
     }
-    const updated = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    res.json(updated)
+    await service.update(req.body)
+    res.json(service)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
@@ -48,12 +48,12 @@ const updateService = async (req, res) => {
 
 const deleteService = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id)
+    const service = await Service.findByPk(req.params.id)
     if (!service) return res.status(404).json({ message: 'Service not found' })
-    if (service.provider.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (service.providerId !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Not authorized' })
     }
-    await service.deleteOne()
+    await service.destroy()
     res.json({ message: 'Service removed' })
   } catch (error) {
     res.status(500).json({ message: error.message })

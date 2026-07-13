@@ -1,16 +1,18 @@
-const mongoose = require('mongoose')
+const { DataTypes } = require('sequelize')
+const { sequelize } = require('../config/db')
 
-const bookingSchema = mongoose.Schema({
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  provider: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
-  date: { type: Date, required: true },
-  time: { type: String, required: true },
-  address: { type: String, required: true },
-  notes: { type: String },
-  status: { type: String, enum: ['pending', 'confirmed', 'in-progress', 'completed', 'cancelled'], default: 'pending' },
-  totalPrice: { type: Number, required: true },
-  paymentStatus: { type: String, enum: ['unpaid', 'paid', 'refunded'], default: 'unpaid' },
+const Booking = sequelize.define('Booking', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  customerId: { type: DataTypes.INTEGER, allowNull: false },
+  providerId: { type: DataTypes.INTEGER, allowNull: false },
+  serviceId: { type: DataTypes.INTEGER, allowNull: false },
+  date: { type: DataTypes.DATEONLY, allowNull: false },
+  time: { type: DataTypes.STRING, allowNull: false },
+  address: { type: DataTypes.STRING, allowNull: false },
+  notes: { type: DataTypes.TEXT },
+  status: { type: DataTypes.ENUM('pending', 'confirmed', 'in-progress', 'completed', 'cancelled'), defaultValue: 'pending' },
+  totalPrice: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+  paymentStatus: { type: DataTypes.ENUM('unpaid', 'paid', 'refunded'), defaultValue: 'unpaid' },
 }, { timestamps: true })
 
-module.exports = mongoose.model('Booking', bookingSchema)
+module.exports = Booking
