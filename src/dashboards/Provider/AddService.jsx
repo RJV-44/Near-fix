@@ -4,7 +4,7 @@ import { serviceAPI, categoryAPI } from '../../api.js'
 
 function AddService() {
   const [categories, setCategories] = useState([])
-  const [form, setForm] = useState({ title: '', category: '', price: '', duration: '', description: '', serviceArea: '' })
+  const [form, setForm] = useState({ title: '', category: '', price: '', duration: '', description: '' })
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
 
@@ -17,9 +17,11 @@ function AddService() {
     setSubmitted(true)
     setError('')
     try {
+      const selectedCat = categories.find(c => c.name === form.category)
       await serviceAPI.create({
         title: form.title,
         category: form.category,
+        categoryId: selectedCat?.id || null,
         description: form.description,
         price: parseFloat(form.price),
         duration: form.duration,
@@ -44,8 +46,8 @@ function AddService() {
         </select>
       </label>
       <div className="form-row">
-        <label>Starting price
-          <input type="number" placeholder="89" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required />
+        <label>Starting price ($)
+          <input type="number" min="0" step="0.01" placeholder="89" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required />
         </label>
         <label>Duration
           <input placeholder="e.g. 3 hours" value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} />

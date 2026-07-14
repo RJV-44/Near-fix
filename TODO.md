@@ -1,3 +1,3 @@
 - [x] Update server/config/db.js to auto-create MySQL database if it doesn’t exist (CREATE DATABASE IF NOT EXISTS)
-- [ ] Verify server startup (node server.js / npm run dev) (requires correct DB_USER/DB_PASSWORD)
-- [ ] Verify tables + default categories are created on fresh DB
+- [x] Verify server startup (node server.js / npm run dev) (requires correct DB_USER/DB_PASSWORD)
+- [x] Verify tables + default categories are created on fresh DB

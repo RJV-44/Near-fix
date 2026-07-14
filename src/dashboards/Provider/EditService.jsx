@@ -12,7 +12,7 @@ function EditService() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.split('?')[1] || '')
     const id = params.get('id')
-    if (!id) { setLoading(false); return }
+    if (!id) { setLoading(false); setError('No service ID specified'); return }
 
     Promise.all([
       serviceAPI.getById(id),
@@ -39,9 +39,11 @@ function EditService() {
     setSubmitted(true)
     setError('')
     try {
+      const selectedCat = categories.find(c => c.name === form.category)
       await serviceAPI.update(id, {
         title: form.title,
         category: form.category,
+        categoryId: selectedCat?.id || null,
         description: form.description,
         price: parseFloat(form.price),
         duration: form.duration,
@@ -67,8 +69,8 @@ function EditService() {
         </select>
       </label>
       <div className="form-row">
-        <label>Starting price
-          <input type="number" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required />
+        <label>Starting price ($)
+          <input type="number" min="0" step="0.01" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required />
         </label>
         <label>Duration
           <input value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} />
@@ -84,7 +86,7 @@ function EditService() {
         <button className="text-button danger" type="button" onClick={async () => {
           const params = new URLSearchParams(window.location.hash.split('?')[1] || '')
           const id = params.get('id')
-          if (id && confirm('Delete this service?')) {
+          if (id && confirm(`Delete "${form.title}"? This cannot be undone.`)) {
             try { await serviceAPI.delete(id); window.location.hash = '#provider-my-services' } catch(e) { alert(e.message) }
           }
         }}>Delete service</button>

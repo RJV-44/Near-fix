@@ -36,13 +36,13 @@ function Dashboard() {
 
   return <CustomerLayout title={`Welcome back, ${user?.name || 'Customer'}`} subtitle="Manage your services and upcoming bookings.">
     <section className="stat-grid customer-stats">
-      <StatCard icon="??" label="Upcoming bookings" value={upcoming.toString()} />
-      <StatCard icon="?" label="Completed services" value={completed.toString()} />
-<StatCard icon="?" label="Favorite providers" value={favorites.toString()} />
+      <StatCard icon="📅" label="Upcoming bookings" value={upcoming.toString()} />
+      <StatCard icon="✅" label="Completed services" value={completed.toString()} />
+      <StatCard icon="❤️" label="Favorite providers" value={favorites.toString()} />
     </section>
     <section className="panel">
-      <div className="panel-heading"><div><h2>Upcoming booking</h2><p>Your next confirmed service.</p></div><a className="primary-button" href="#customer-bookings">View booking</a></div>
-      {loading ? <p>Loading...</p> : nextBooking ? <article className="customer-booking"><div className="booking-icon">??</div><div><strong>{nextBooking.service?.title || 'Service'}</strong><p>{nextBooking.provider?.businessName || nextBooking.provider?.name || 'Provider'} · {nextBooking.date} {nextBooking.time}</p><span className={`status status-${nextBooking.status?.toLowerCase() || 'pending'}`}>{nextBooking.status || 'Pending'}</span></div></article> : <p>No upcoming bookings.</p>}
+      <div className="panel-heading"><div><h2>Upcoming booking</h2><p>Your next confirmed service.</p></div><a className="primary-button" href="#customer-bookings">View all bookings</a></div>
+      {loading ? <p>Loading...</p> : nextBooking ? <article className="customer-booking"><div className="booking-icon">📋</div><div><strong>{nextBooking.service?.title || 'Service'}</strong><p>{nextBooking.provider?.businessName || nextBooking.provider?.name || 'Provider'} · {nextBooking.date} {nextBooking.time || ''}</p><span className={`status status-${nextBooking.status?.toLowerCase() || 'pending'}`}>{nextBooking.status || 'Pending'}</span></div></article> : <p>No upcoming bookings. <a href="#services">Browse services</a> to book one!</p>}
     </section>
   </CustomerLayout>
 }

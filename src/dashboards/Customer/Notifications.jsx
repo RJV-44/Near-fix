@@ -36,7 +36,7 @@ function Notifications() {
         {loading ? <p>Loading...</p> :
          notifications.length === 0 ? <p>No notifications yet.</p> :
          notifications.map(n => <article className={`notification-item ${!n.isRead ? 'unread' : ''}`} key={n.id} onClick={() => markRead(n.id)}>
-           <span>??</span>
+           <span>🔔</span>
            <div>
              <strong>{n.title}</strong>
              <p>{n.message}</p>

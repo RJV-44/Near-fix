@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
-import { useAuth } from '../context/AuthContext'
 import { authAPI } from '../api.js'
 
 function Register() {
-  const { login } = useAuth()
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'Customer' })
   const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -15,12 +13,10 @@ function Register() {
     setSubmitted(true)
     setError('')
     try {
-      const roleKey = form.role === 'Provider' ? 'provider' : 'customer'
+      const roleKey = form.role === 'Service provider' ? 'provider' : 'customer'
       const data = await authAPI.register({ name: form.name, email: form.email, password: form.password, role: roleKey })
       localStorage.setItem('auth_token', data.token)
-      login({ id: data.id, name: data.name, email: data.email, role: data.role })
-      const dash = data.role === 'provider' ? '#provider-dashboard' : '#customer-dashboard'
-      setTimeout(() => { window.location.hash = dash }, 100)
+      window.location.hash = '#login'
     } catch (err) {
       setError(err.message)
       setSubmitted(false)
@@ -55,7 +51,7 @@ function Register() {
         <button className="primary-button" type="submit" disabled={submitted}>
           {submitted ? 'Creating account...' : 'Create account'}
         </button>
-        {submitted && !error && <small className="form-success">Account created. Redirecting to your dashboard...</small>}
+        {submitted && !error && <small className="form-success">Account created. Redirecting to login...</small>}
         <p className="auth-switch">Already have an account? <a href="#login">Log in</a></p>
       </form>
     </main>

@@ -9,8 +9,8 @@ const {
 const { protect, authorize } = require("../middleware/auth");
 
 router.get("/", protect, authorize("admin"), getUsers);
-router.get("/:id", protect, authorize("admin"), getUserById);
-router.put("/:id", protect, authorize("admin"), updateUser);
+router.get("/:id", protect, getUserById);
+router.put("/:id", protect, updateUser);
 router.put("/:id/toggle-status", protect, authorize("admin"), toggleUserStatus);
 
 module.exports = router;

@@ -13,10 +13,12 @@ function Payments() {
       .finally(() => setLoading(false))
   }, [])
 
+  const totalSpent = payments.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0)
+
   return <CustomerLayout title="Payments" subtitle="View your payment methods and transaction history.">
-    <section className="payment-method">
-      <div><span>??</span><strong>Visa ending in 4242</strong><small>Expires 08/28</small></div>
-      <button className="text-button">Manage</button>
+    <section className="stat-grid customer-payment-stats">
+      <article className="stat-card"><p>Total spent</p><h2>${totalSpent.toFixed(2)}</h2></article>
+      <article className="stat-card"><p>Transactions</p><h2>{payments.length}</h2></article>
     </section>
     <section className="panel">
       <div className="panel-heading"><div><h2>Payment history</h2><p>{payments.length} transactions</p></div></div>
@@ -27,8 +29,8 @@ function Payments() {
            <td>#{p.id}</td>
            <td>{p.booking?.id ? `Booking #${p.booking.id}` : 'Service'}</td>
            <td>{p.paidAt ? new Date(p.paidAt).toLocaleDateString() : p.createdAt?.split('T')[0] || '—'}</td>
-           <td>${parseFloat(p.amount || 0).toFixed(2)}</td>
-           <td><span className={`status status-${p.status?.toLowerCase() || 'pending'}`}>{p.status || 'Pending'}</span></td>
+           <td><strong>${parseFloat(p.amount || 0).toFixed(2)}</strong></td>
+           <td><span className={`status status-${p.status?.toLowerCase() || 'paid'}`}>{p.status || 'Paid'}</span></td>
          </tr>)}
       </tbody></table></div>
     </section>

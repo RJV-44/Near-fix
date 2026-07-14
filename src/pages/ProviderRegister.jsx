@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
-import { useAuth } from '../context/AuthContext'
 import { authAPI, categoryAPI } from '../api.js'
 
 function ProviderRegister() {
-  const { login } = useAuth()
   const [categories, setCategories] = useState([])
   const [form, setForm] = useState({ businessName: '', name: '', email: '', phone: '', password: '', serviceCategory: '', yearsOfExperience: '' })
   const [error, setError] = useState('')
@@ -31,8 +29,7 @@ function ProviderRegister() {
         yearsOfExperience: form.yearsOfExperience,
       })
       localStorage.setItem('auth_token', data.token)
-      login({ id: data.id, name: data.name, email: data.email, role: data.role })
-      setTimeout(() => { window.location.hash = '#provider-dashboard' }, 100)
+      window.location.hash = '#login'
     } catch (err) {
       setError(err.message)
       setSubmitted(false)
@@ -84,7 +81,7 @@ function ProviderRegister() {
         <button className="primary-button" type="submit" disabled={submitted}>
           {submitted ? 'Creating account...' : 'Create provider account'}
         </button>
-        {submitted && !error && <small className="form-success">Provider account created. Redirecting to your dashboard...</small>}
+        {submitted && !error && <small className="form-success">Provider account created. Redirecting to login...</small>}
         <p className="auth-switch">Already have an account? <a href="#login">Log in</a> | <a href="#register">Register as customer</a></p>
       </form>
     </main>
