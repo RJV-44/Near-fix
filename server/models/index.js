@@ -21,6 +21,7 @@ User.hasMany(Favorite, { foreignKey: 'customerId', as: 'favorites' })
 User.hasMany(Payout, { foreignKey: 'providerId', as: 'payouts' })
 
 Service.belongsTo(Category, { foreignKey: 'categoryId', as: 'categoryRef' })
+Service.belongsTo(User, { foreignKey: 'providerId', as: 'provider' })
 
 // Booking associations
 Booking.belongsTo(User, { foreignKey: 'customerId', as: 'customer' })
@@ -55,3 +56,4 @@ Category.hasMany(Service, { foreignKey: 'categoryId', as: 'services' })
 
 
 module.exports = { User, Service, Booking, Review, Payment, Notification, Favorite, Category, Payout }
+

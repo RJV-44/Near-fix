@@ -5,7 +5,7 @@ const getServices = async (req, res) => {
     const where = { isActive: true }
     if (req.query.category) where.category = req.query.category
     if (req.query.provider) where.providerId = req.query.provider
-    const services = await Service.findAll({ where, include: [{ model: User, as: 'provider', attributes: ['id', 'name', 'businessName', 'rating'] }] })
+    const services = await Service.findAll({ where, include: [{ model: User, as: 'provider', attributes: ['id', 'name', 'businessName'] }] })
     res.json(services)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -14,7 +14,7 @@ const getServices = async (req, res) => {
 
 const getServiceById = async (req, res) => {
   try {
-    const service = await Service.findByPk(req.params.id, { include: [{ model: User, as: 'provider', attributes: ['id', 'name', 'businessName', 'email', 'phone', 'rating'] }] })
+    const service = await Service.findByPk(req.params.id, { include: [{ model: User, as: 'provider', attributes: ['id', 'name', 'businessName', 'email', 'phone'] }] })
     if (!service) return res.status(404).json({ message: 'Service not found' })
     res.json(service)
   } catch (error) {

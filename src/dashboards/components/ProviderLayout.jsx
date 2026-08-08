@@ -1,7 +1,7 @@
 import LogoutButton from '../../components/LogoutButton.jsx'
 import { useAuth } from '../../context/AuthContext'
 
-const links = ['Dashboard', 'Profile', 'My Services', 'Add Service', 'Edit Service', 'Bookings', 'Earnings', 'Reviews', 'Notifications', 'Settings']
+const links = ['Dashboard', 'Profile', 'My Services', 'Add Service', 'Bookings', 'Earnings', 'Reviews', 'Notifications', 'Settings']
 
 function ProviderLayout({ title, subtitle, children }) {
   const { user } = useAuth()

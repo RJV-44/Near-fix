@@ -26,6 +26,9 @@ require('./models');
 // Auth & Users
 app.use('/api/auth', require('./routes/authRoutes'));
 
+// Users (profile management)
+app.use('/api/users', require('./routes/userRoutes'));
+
 // Services
 app.use('/api/services', require('./routes/serviceRoutes')); 
 

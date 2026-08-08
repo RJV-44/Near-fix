@@ -17,7 +17,7 @@ function Dashboard() {
         const [bookings, payments, reviews, services] = await Promise.all([
           bookingAPI.getAll(),
           paymentAPI.getAll(),
-          reviewAPI.getAll(),
+          reviewAPI.getAll({ mine: 'true' }),
           serviceAPI.getAll({ mine: 'true' }),
         ])
         const pending = bookings.filter(b => b.status === 'pending')

@@ -7,13 +7,10 @@ function Earnings() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([
-      paymentAPI.getAll(),
-      payoutAPI.getAll(),
-    ]).then(([pays]) => {
-      setPayments(pays)
-    }).catch(() => {})
-    .finally(() => setLoading(false))
+    paymentAPI.getAll()
+      .then(data => setPayments(data))
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
   const totalEarnings = payments.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0)

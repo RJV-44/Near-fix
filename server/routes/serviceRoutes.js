@@ -1,12 +1,18 @@
-const express = require('express')
-const router = express.Router()
-const { getServices, getServiceById, createService, updateService, deleteService } = require('../controllers/serviceController')
-const { protect, authorize } = require('../middleware/auth')
+const express = require("express");
+const router = express.Router();
+const {
+  getServices,
+  getServiceById,
+  createService,
+  updateService,
+  deleteService,
+} = require("../controllers/serviceController");
+const { protect, authorize } = require("../middleware/auth");
 
-router.get('/', getServices)
-router.get('/:id', getServiceById)
-router.post('/', protect, authorize('provider', 'admin'), createService)
-router.put('/:id', protect, authorize('provider', 'admin'), updateService)
-router.delete('/:id', protect, authorize('provider', 'admin'), deleteService)
+router.get("/", getServices);
+router.get("/:id", getServiceById);
+router.post("/", protect, authorize("provider", "admin"), createService);
+router.put("/:id", protect, authorize("provider", "admin"), updateService);
+router.delete("/:id", protect, authorize("provider", "admin"), deleteService);
 
-module.exports = router
+module.exports = router;

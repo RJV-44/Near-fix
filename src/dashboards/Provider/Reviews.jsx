@@ -7,7 +7,7 @@ function Reviews() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    reviewAPI.getAll()
+    reviewAPI.getAll({ mine: 'true' })
       .then(data => setReviews(data))
       .catch(() => {})
       .finally(() => setLoading(false))
