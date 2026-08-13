@@ -16,20 +16,17 @@ function Reviews() {
   return <AdminLayout title="Reviews" subtitle="Moderate customer feedback and provider responses.">
     <section className="panel">
       <div className="panel-heading"><div><h2>Recent reviews</h2><p>{reviews.length} reviews total</p></div></div>
-      <div className="review-list">
-        {loading ? <p>Loading...</p> :
-         reviews.length === 0 ? <p>No reviews yet.</p> :
-         reviews.map(r => <article className="review-item" key={r.id}>
-           <div>
-             <strong>{r.customer?.name || 'Customer'}</strong>
-             <p>for {r.provider?.businessName || r.provider?.name || 'Provider'} · <span className="stars">{'?'.repeat(r.rating)}</span></p>
-             <q>{r.comment}</q>
-           </div>
-           <div>
-             <span className={`status status-${r.isApproved ? 'active' : 'pending'}`}>{r.isApproved ? 'Approved' : 'Pending'}</span>
-           </div>
-         </article>)}
-      </div>
+      <div className="table-wrap"><table><thead><tr><th>Customer</th><th>Provider</th><th>Rating</th><th>Comment</th><th>Status</th></tr></thead><tbody>
+        {loading ? <tr><td colSpan="5">Loading...</td></tr> :
+         reviews.length === 0 ? <tr><td colSpan="5">No reviews yet.</td></tr> :
+         reviews.map(r => <tr key={r.id}>
+           <td>{r.customer?.name || 'Customer'}</td>
+           <td>{r.provider?.businessName || r.provider?.name || 'Provider'}</td>
+           <td><span className="stars">{'★'.repeat(Math.round(r.rating || 0))}{'☆'.repeat(Math.max(0, 5 - Math.round(r.rating || 0)))}</span></td>
+           <td>{r.comment || '—'}</td>
+           <td><span className={`status status-${r.isApproved ? 'active' : 'pending'}`}>{r.isApproved ? 'Approved' : 'Pending'}</span></td>
+         </tr>)}
+      </tbody></table></div>
     </section>
   </AdminLayout>
 }

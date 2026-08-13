@@ -14,8 +14,7 @@ function Register() {
     setError('')
     try {
       const roleKey = form.role === 'Service provider' ? 'provider' : 'customer'
-      const data = await authAPI.register({ name: form.name, email: form.email, password: form.password, role: roleKey })
-      localStorage.setItem('auth_token', data.token)
+      await authAPI.register({ name: form.name, email: form.email, password: form.password, role: roleKey })
       window.location.hash = '#login'
     } catch (err) {
       setError(err.message)

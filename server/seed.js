@@ -1,21 +1,14 @@
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
 const { User } = require("./models");
 const { sequelize } = require("./config/db");
 
-
 const seedUsers = async () => {
   try {
     await sequelize.sync();
 
-    const count = await User.count();
-    if (count > 0) {
-      console.log("Users already exist, skipping seed.");
-      process.exit(0);
-    }
-
-    await User.bulkCreate([
+    const defaults = [
       {
         name: "Admin User",
         email: "admin@example.com",
@@ -40,9 +33,26 @@ const seedUsers = async () => {
         serviceCategory: "Cleaning",
         yearsOfExperience: "5",
       },
-    ]);
+    ];
 
-    console.log("Test users seeded successfully!");
+    const created = [];
+    for (const item of defaults) {
+      const existing = await User.findOne({ where: { email: item.email } });
+      if (!existing) {
+        await User.create(item);
+        created.push(item.email);
+      }
+    }
+
+    if (created.length === 0) {
+      console.log("Default users already exist; no seed changes needed.");
+    } else {
+      console.log(
+        "Missing default users seeded successfully:",
+        created.join(", "),
+      );
+    }
+
     console.log("  Admin:    admin@example.com / admin123");
     console.log("  Customer: customer@example.com / customer123");
     console.log("  Provider: provider@example.com / provider123");
@@ -51,6 +61,4 @@ const seedUsers = async () => {
     console.error("Seed error:", error.message);
     process.exit(1);
   }
-};
-
-seedUsers();
+}

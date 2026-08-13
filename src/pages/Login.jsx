@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { authAPI } from '../api.js'
 
 function Login() {
-  const { login } = useAuth()
+  const { login, getDashboardHash } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('Customer')
@@ -17,11 +17,13 @@ function Login() {
     setSubmitted(true)
     setError('')
     try {
-      const data = await authAPI.login(email, password)
+      const data = await authAPI.login(email, password, role.toLowerCase())
       localStorage.setItem('auth_token', data.token)
       login({ id: data.id, name: data.name, email: data.email, role: data.role })
-      const dash = data.role === 'admin' ? '#admin-dashboard' : data.role === 'provider' ? '#provider-dashboard' : '#customer-dashboard'
-      window.location.hash = dash
+      const target = getDashboardHash(data.role)
+      setTimeout(() => {
+        window.location.hash = target
+      }, 0)
     } catch (err) {
       setError(err.message)
       setSubmitted(false)

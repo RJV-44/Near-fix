@@ -3,10 +3,34 @@ import { authAPI } from '../api.js'
 
 const AuthContext = createContext(null)
 
+const normalizeRole = (role) => {
+  const value = String(role || '').toLowerCase()
+  if (value === 'admin' || value === 'provider' || value === 'customer') return value
+  return 'customer'
+}
+
+const getDashboardHash = (role) => {
+  switch (normalizeRole(role)) {
+    case 'admin':
+      return '#admin-dashboard'
+    case 'provider':
+      return '#provider-dashboard'
+    default:
+      return '#customer-dashboard'
+  }
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem('auth_user')
-    return stored ? JSON.parse(stored) : null
+    if (!stored) return null
+
+    try {
+      const parsed = JSON.parse(stored)
+      return { ...parsed, role: normalizeRole(parsed?.role) }
+    } catch {
+      return null
+    }
   })
   const [loading, setLoading] = useState(true)
 
@@ -16,8 +40,9 @@ export function AuthProvider({ children }) {
     if (token && !user) {
       authAPI.getMe()
         .then(data => {
-          setUser(data)
-          localStorage.setItem('auth_user', JSON.stringify(data))
+          const normalizedUser = { ...data, role: normalizeRole(data?.role) }
+          setUser(normalizedUser)
+          localStorage.setItem('auth_user', JSON.stringify(normalizedUser))
         })
         .catch(() => {
           localStorage.removeItem('auth_token')
@@ -30,8 +55,9 @@ export function AuthProvider({ children }) {
   }, [])
 
   const login = (userData) => {
-    setUser(userData)
-    localStorage.setItem('auth_user', JSON.stringify(userData))
+    const normalizedUser = { ...userData, role: normalizeRole(userData?.role) }
+    setUser(normalizedUser)
+    localStorage.setItem('auth_user', JSON.stringify(normalizedUser))
   }
 
   const logout = () => {
@@ -47,7 +73,7 @@ export function AuthProvider({ children }) {
   const isProvider = user?.role === 'provider'
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, isAdmin, isCustomer, isProvider, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, isAdmin, isCustomer, isProvider, loading, getDashboardHash }}>
       {children}
     </AuthContext.Provider>
   )

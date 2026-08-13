@@ -1,2 +1,2 @@
-function DashboardFooter() { return <footer className="dashboard-footer">Â© 2026 Local Services Â· Admin Portal</footer> }
+function DashboardFooter() { return <footer className="dashboard-footer">&copy; 2026 Local Services &middot; Admin Portal</footer> }
 export default DashboardFooter

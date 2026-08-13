@@ -10,20 +10,24 @@ function Contact() {
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
+    setSent(false)
+
     try {
-      // Send contact message to a notification or log endpoint
-      const res = await fetch('http://localhost:5000/api/notifications', {
+      const res = await fetch('http://localhost:5000/api/notifications/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: 1,
-          title: `Contact: ${form.subject}`,
-          message: `From: ${form.name} (${form.email})\n\n${form.message}`,
-          type: 'system',
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
         }),
       })
-      if (!res.ok) throw new Error('Failed to send')
+
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.message || 'Failed to send')
       setSent(true)
+      setForm({ name: '', email: '', subject: 'Booking question', message: '' })
     } catch (err) {
       setError(err.message)
     }

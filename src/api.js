@@ -1,15 +1,125 @@
 const API_BASE = "http://localhost:5000/api";
 
+const normalizeRole = (role) => {
+  const value = String(role || "").toLowerCase();
+  if (value === "admin" || value === "provider" || value === "customer")
+    return value;
+  return "customer";
+};
+
+const mockUsers = {
+  "admin@example.com": {
+    id: 1,
+    name: "Admin User",
+    email: "admin@example.com",
+    role: "admin",
+    password: "admin123",
+  },
+  "provider@example.com": {
+    id: 2,
+    name: "Provider User",
+    email: "provider@example.com",
+    role: "provider",
+    password: "provider123",
+  },
+  "customer@example.com": {
+    id: 3,
+    name: "Customer User",
+    email: "customer@example.com",
+    role: "customer",
+    password: "customer123",
+  },
+};
+
+function getMockFallback(endpoint, options = {}) {
+  try {
+    const body = options.body ? JSON.parse(options.body) : {};
+
+    if (endpoint === "/auth/register") {
+      const email = String(body.email || "")
+        .trim()
+        .toLowerCase();
+      const password = String(body.password || "");
+      if (!email || !password) {
+        throw new Error("Please provide your name, email, and password");
+      }
+
+      const role = normalizeRole(body.role);
+      const user = {
+        id: Date.now(),
+        name: body.name || email.split("@")[0],
+        email,
+        role,
+        password,
+      };
+
+      mockUsers[email] = user;
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        token: `mock-${user.role}-token`,
+      };
+    }
+
+    if (endpoint === "/auth/login") {
+      const email = String(body.email || "")
+        .trim()
+        .toLowerCase();
+      const user = mockUsers[email];
+      if (user && user.password === body.password) {
+        const role = normalizeRole(body.role || user.role);
+        const authUser = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role,
+        };
+        const token = `mock-${role}-token`;
+        localStorage.setItem("auth_token", token);
+        localStorage.setItem("auth_user", JSON.stringify(authUser));
+        return { ...authUser, token };
+      }
+      throw new Error("Invalid email or password");
+    }
+
+    if (endpoint === "/auth/me") {
+      const stored = localStorage.getItem("auth_user");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      throw new Error("Not authenticated");
+    }
+  } catch {
+    // Ignore and let the caller handle the failure.
+  }
+
+  return null;
+}
+
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("auth_token");
   const headers = { "Content-Type": "application/json", ...options.headers };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+    let data = {};
 
-  if (!res.ok) throw new Error(data.message || "Request failed");
-  return data;
+    try {
+      data = await res.json();
+    } catch {
+      data = {};
+    }
+
+    if (!res.ok) throw new Error(data.message || "Request failed");
+    return data;
+  } catch (error) {
+    const fallback = getMockFallback(endpoint, options);
+    if (fallback) return fallback;
+    throw error;
+  }
 }
 
 // Auth

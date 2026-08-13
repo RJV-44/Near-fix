@@ -3,6 +3,8 @@ import LogoutButton from './LogoutButton.jsx'
 const links = ['Home', 'Services', 'About', 'Contact']
 function Navbar({ onLogin, onRegister }) {
   const { isAuthenticated } = useAuth()
+  const handleLogin = onLogin || (() => { window.location.hash = '#login' })
+  const handleRegister = onRegister || (() => { window.location.hash = '#register' })
   return (
     <header className="site-navbar">
       <a className="site-brand" href="#home">Local<span>Services</span></a>
@@ -11,7 +13,7 @@ function Navbar({ onLogin, onRegister }) {
         {isAuthenticated ? (
           <LogoutButton />
         ) : (
-          <><button className="nav-login" onClick={onLogin}>Log in</button><button className="nav-register" onClick={onRegister}>Join now</button></>
+          <><button className="nav-login" onClick={handleLogin}>Log in</button><button className="nav-register" onClick={handleRegister}>Join now</button></>
         )}
       </div>
     </header>

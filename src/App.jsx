@@ -68,24 +68,25 @@ const providerRoutes = {
 const allRoutes = { ...publicRoutes, ...adminRoutes, ...customerRoutes, ...providerRoutes }
 
 function Router() {
-  const { isAuthenticated, user, loading } = useAuth()
+  const { isAuthenticated, user, loading, getDashboardHash } = useAuth()
   const [hash, setHash] = useState(window.location.hash || '#home')
 
   useEffect(() => {
     const updateRoute = () => setHash(window.location.hash || '#home')
     window.addEventListener('hashchange', updateRoute)
     return () => window.removeEventListener('hashchange', updateRoute)
-  }, [])
+  }, [hash])
 
   // When user becomes authenticated, redirect to their dashboard if still on login
   useEffect(() => {
-    if (isAuthenticated && user && (hash === '#login' || hash === '#admin-login')) {
-      const dash = user.role === 'admin' ? '#admin-dashboard'
-        : user.role === 'provider' ? '#provider-dashboard'
-        : '#customer-dashboard'
-      window.location.hash = dash
+    if (isAuthenticated && user && (hash === '#login' || hash === '#admin-login' || hash === '#home')) {
+      const target = getDashboardHash(user.role)
+      if (hash !== target) {
+        setHash(target)
+        window.location.hash = target
+      }
     }
-  }, [isAuthenticated, user, hash])
+  }, [isAuthenticated, user, hash, getDashboardHash])
 
   // Wait for auth check before rendering protected routes
   if (loading) return null

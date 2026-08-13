@@ -31,9 +31,13 @@ function Services() {
     fetchData()
   }, [selectedCategory])
 
-  const filtered = services.filter(s =>
-    !searchQuery || s.title.toLowerCase().includes(searchQuery.toLowerCase()) || s.category.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filtered = (services || []).filter(s => {
+    const title = String(s?.title || '').toLowerCase()
+    const category = String(s?.category || '').toLowerCase()
+    const query = String(searchQuery || '').toLowerCase()
+    return !query || title.includes(query) || category.includes(query)
+  })
+
   return <div className="public-page"><Navbar onLogin={() => { window.location.hash = '#login' }} onRegister={() => { window.location.hash = '#register' }} />
     <main className="public-section services-page">
       <p className="hero-eyebrow">LOCAL PROFESSIONALS</p>
@@ -49,7 +53,7 @@ function Services() {
       <div className="public-service-grid">
         {loading ? <p>Loading services...</p> :
           filtered.length === 0 ? <p>No services found.</p> :
-          filtered.map(s => <ServiceCard key={s.id} id={s.id} title={s.title} category={s.category} rating={s.rating || '0.0'} reviews={s.reviewCount || 0} price={`$${parseFloat(s.price).toFixed(0)}`} image={s.image || '??'} onBook={() => { window.location.hash = `#service-details?id=${s.id}` }} />)}
+          filtered.map(s => <ServiceCard key={s.id} id={s.id} title={s.title} category={s.category} rating={s.rating || '0.0'} reviews={s.reviewCount || 0} price={`$${parseFloat(s.price || 0).toFixed(0)}`} image={s.image || '🛠️'} onBook={() => { window.location.hash = `#service-details?id=${s.id}` }} />)}
       </div>
     </main>
   <Footer /></div>

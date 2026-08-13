@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { authAPI } from '../api.js'
 
 function AdminLogin() {
-  const { login } = useAuth()
+  const { login, getDashboardHash } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -16,13 +16,16 @@ function AdminLogin() {
     setSubmitted(true)
     setError('')
     try {
-      const data = await authAPI.login(email, password)
+      const data = await authAPI.login(email, password, 'admin')
       if (data.role !== 'admin') {
         throw new Error('Access denied. Admin credentials required.')
       }
       localStorage.setItem('auth_token', data.token)
       login({ id: data.id, name: data.name, email: data.email, role: data.role })
-      window.location.hash = '#admin-dashboard'
+      const target = getDashboardHash(data.role)
+      setTimeout(() => {
+        window.location.hash = target
+      }, 0)
     } catch (err) {
       setError(err.message)
       setSubmitted(false)

@@ -18,7 +18,7 @@ function ProviderRegister() {
     setSubmitted(true)
     setError('')
     try {
-      const data = await authAPI.register({
+      await authAPI.register({
         name: form.name,
         email: form.email,
         password: form.password,
@@ -28,7 +28,6 @@ function ProviderRegister() {
         serviceCategory: form.serviceCategory,
         yearsOfExperience: form.yearsOfExperience,
       })
-      localStorage.setItem('auth_token', data.token)
       window.location.hash = '#login'
     } catch (err) {
       setError(err.message)
