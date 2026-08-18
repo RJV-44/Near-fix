@@ -53,7 +53,7 @@ function Services() {
       <div className="public-service-grid">
         {loading ? <p>Loading services...</p> :
           filtered.length === 0 ? <p>No services found.</p> :
-          filtered.map(s => <ServiceCard key={s.id} id={s.id} title={s.title} category={s.category} rating={s.rating || '0.0'} reviews={s.reviewCount || 0} price={`$${parseFloat(s.price || 0).toFixed(0)}`} image={s.image || '🛠️'} onBook={() => { window.location.hash = `#service-details?id=${s.id}` }} />)}
+          filtered.map(s => <ServiceCard key={s.id} id={s.id} title={s.title} category={s.category} rating={s.rating || '0.0'} reviews={s.reviewCount || 0} price={`$${parseFloat(s.price || 0).toFixed(0)}`} image={s.image || '🛠️'} onView={() => { window.location.hash = `#service-details?id=${s.id}` }} onBook={() => { window.location.hash = `#booking?serviceId=${s.id}` }} />)}
       </div>
     </main>
   <Footer /></div>
