@@ -32,7 +32,7 @@ function Bookings() {
            <td><strong>{b.customer?.name || 'Customer'}</strong></td>
            <td>{b.service?.title || 'Service'}</td>
            <td>{b.date} {b.time}</td>
-           <td>${parseFloat(b.totalPrice || 0).toFixed(2)}</td>
+           <td>₹{parseFloat(b.totalPrice || 0).toFixed(2)}</td>
            <td><span className={`status status-${b.status?.toLowerCase() || 'pending'}`}>{b.status || 'Pending'}</span></td>
            <td>
              {b.status === 'pending' && <><button className="text-button" onClick={() => updateStatus(b.id, 'confirmed')}>Accept</button><button className="text-button danger" onClick={() => updateStatus(b.id, 'cancelled')}>Decline</button></>}

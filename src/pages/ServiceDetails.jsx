@@ -44,7 +44,7 @@ function ServiceDetails() {
           <p>{service.description}</p>
           {service.duration && <p><strong>Duration:</strong> {service.duration}</p>}
           <div className="details-price">
-            <strong>From ${parseFloat(service.price).toFixed(2)}</strong>
+            <strong>From ₹{parseFloat(service.price).toFixed(2)}</strong>
             {service.duration && <span>Estimated duration: {service.duration}</span>}
           </div>
           <a className="primary-button" href={`#booking?serviceId=${service.id}`} style={{ display: 'inline-block', padding: '0.75rem 1.5rem', textDecoration: 'none' }}>Book this service now</a>

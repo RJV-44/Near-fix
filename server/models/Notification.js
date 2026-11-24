@@ -6,8 +6,16 @@ const Notification = sequelize.define(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     userId: { type: DataTypes.INTEGER, allowNull: true },
-    title: { type: DataTypes.STRING, allowNull: false },
-    message: { type: DataTypes.TEXT, allowNull: false },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: { notEmpty: true, len: [1, 255] },
+    },
+    message: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: { notEmpty: true },
+    },
     type: {
       type: DataTypes.ENUM(
         "booking",
@@ -17,12 +25,19 @@ const Notification = sequelize.define(
         "promotion",
       ),
       defaultValue: "system",
+      allowNull: false,
     },
     isRead: { type: DataTypes.BOOLEAN, defaultValue: false },
     relatedId: { type: DataTypes.INTEGER },
     relatedModel: { type: DataTypes.STRING },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    indexes: [
+      { fields: ["userId", "isRead"] },
+      { fields: ["createdAt"] },
+    ],
+  },
 );
 
 module.exports = Notification;

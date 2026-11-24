@@ -69,7 +69,7 @@ function EditService() {
         </select>
       </label>
       <div className="form-row">
-        <label>Starting price ($)
+        <label>Starting price (₹)
           <input type="number" min="0" step="0.01" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required />
         </label>
         <label>Duration

@@ -23,7 +23,7 @@ function Services() {
            <td><strong>{s.title}</strong></td>
            <td>{s.provider?.businessName || s.provider?.name || 'Provider'}</td>
            <td>{s.category || 'General'}</td>
-           <td>${parseFloat(s.price || 0).toFixed(2)}</td>
+           <td>₹{parseFloat(s.price || 0).toFixed(2)}</td>
            <td><span className={`status status-${s.isActive ? 'active' : 'suspended'}`}>{s.isActive ? 'Active' : 'Inactive'}</span></td>
          </tr>)}
       </tbody></table></div>

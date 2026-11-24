@@ -25,7 +25,7 @@ function Earnings() {
     <section className="stat-grid provider-earnings">
       <article className="stat-card">
         <p>Available balance</p>
-        <h2>${(totalEarnings * 0.7).toFixed(0)}</h2>
+        <h2>₹{(totalEarnings * 0.7).toFixed(0)}</h2>
         <button className="primary-button" onClick={async () => {
           try {
             await payoutAPI.request({ amount: totalEarnings * 0.7, method: 'bank', accountDetails: 'Bank transfer' })
@@ -35,12 +35,12 @@ function Earnings() {
       </article>
       <article className="stat-card">
         <p>Earnings this month</p>
-        <h2>${monthEarnings.toFixed(0)}</h2>
+        <h2>₹{monthEarnings.toFixed(0)}</h2>
         <small className="positive">? From completed bookings</small>
       </article>
       <article className="stat-card">
         <p>Total earnings</p>
-        <h2>${totalEarnings.toFixed(0)}</h2>
+        <h2>₹{totalEarnings.toFixed(0)}</h2>
         <small>All time</small>
       </article>
     </section>
@@ -53,7 +53,7 @@ function Earnings() {
            <td>{p.paidAt ? new Date(p.paidAt).toLocaleDateString() : p.createdAt?.split('T')[0] || '—'}</td>
            <td>{p.booking?.id ? `Booking #${p.booking.id}` : 'Service'}</td>
            <td>{p.customer?.name || 'Customer'}</td>
-           <td>${parseFloat(p.amount || 0).toFixed(2)}</td>
+           <td>₹{parseFloat(p.amount || 0).toFixed(2)}</td>
          </tr>)}
       </tbody></table></div>
     </section>

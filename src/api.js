@@ -1,4 +1,4 @@
-  const API_BASE = "http://localhost:5000/api";
+const API_BASE = "http://localhost:5000/api";
 
 const normalizeRole = (role) => {
   const value = String(role || "").toLowerCase();
@@ -14,6 +14,7 @@ const initialUsers = {
     email: "admin@example.com",
     role: "admin",
     password: "admin123",
+    isActive: true,
   },
   "provider@example.com": {
     id: 2,
@@ -22,6 +23,7 @@ const initialUsers = {
     role: "provider",
     password: "provider123",
     businessName: "Pro Services",
+    isActive: true,
   },
   "customer@example.com": {
     id: 3,
@@ -29,6 +31,7 @@ const initialUsers = {
     email: "customer@example.com",
     role: "customer",
     password: "customer123",
+    isActive: true,
   },
 };
 
@@ -47,14 +50,20 @@ const initialServices = [
     title: "Deep Home Cleaning",
     category: "Home Cleaning",
     categoryId: 1,
-    description: "Complete deep cleaning of living area, kitchen, bathroom, and bedrooms.",
+    description:
+      "Complete deep cleaning of living area, kitchen, bathroom, and bedrooms.",
     price: 89,
     duration: "3 hours",
     image: "🧹",
     rating: "4.9",
     reviewCount: 24,
     providerId: 2,
-    provider: { id: 2, name: "Provider User", businessName: "Pro Services", email: "provider@example.com" },
+    provider: {
+      id: 2,
+      name: "Provider User",
+      businessName: "Pro Services",
+      email: "provider@example.com",
+    },
     isActive: true,
   },
   {
@@ -69,7 +78,12 @@ const initialServices = [
     rating: "4.8",
     reviewCount: 18,
     providerId: 2,
-    provider: { id: 2, name: "Provider User", businessName: "Pro Services", email: "provider@example.com" },
+    provider: {
+      id: 2,
+      name: "Provider User",
+      businessName: "Pro Services",
+      email: "provider@example.com",
+    },
     isActive: true,
   },
   {
@@ -77,14 +91,20 @@ const initialServices = [
     title: "Electrical Repair & Wiring",
     category: "Electrical",
     categoryId: 3,
-    description: "Diagnostic, outlet repair, fixture installations, and wiring troubleshooting.",
+    description:
+      "Diagnostic, outlet repair, fixture installations, and wiring troubleshooting.",
     price: 95,
     duration: "1.5 hours",
     image: "⚡",
     rating: "4.7",
     reviewCount: 15,
     providerId: 2,
-    provider: { id: 2, name: "Provider User", businessName: "Pro Services", email: "provider@example.com" },
+    provider: {
+      id: 2,
+      name: "Provider User",
+      businessName: "Pro Services",
+      email: "provider@example.com",
+    },
     isActive: true,
   },
   {
@@ -99,7 +119,12 @@ const initialServices = [
     rating: "4.9",
     reviewCount: 30,
     providerId: 2,
-    provider: { id: 2, name: "Provider User", businessName: "Pro Services", email: "provider@example.com" },
+    provider: {
+      id: 2,
+      name: "Provider User",
+      businessName: "Pro Services",
+      email: "provider@example.com",
+    },
     isActive: true,
   },
   {
@@ -107,14 +132,20 @@ const initialServices = [
     title: "Full House Interior Painting",
     category: "Painting",
     categoryId: 5,
-    description: "Wall preparation, prime coat, and premium double-coat wall paint.",
+    description:
+      "Wall preparation, prime coat, and premium double-coat wall paint.",
     price: 350,
     duration: "1 day",
     image: "🎨",
     rating: "4.8",
     reviewCount: 10,
     providerId: 2,
-    provider: { id: 2, name: "Provider User", businessName: "Pro Services", email: "provider@example.com" },
+    provider: {
+      id: 2,
+      name: "Provider User",
+      businessName: "Pro Services",
+      email: "provider@example.com",
+    },
     isActive: true,
   },
   {
@@ -122,14 +153,20 @@ const initialServices = [
     title: "Furniture Assembly & Handyman",
     category: "Handyman",
     categoryId: 6,
-    description: "Assembling flat-pack furniture, TV mounting, and wall hanging.",
+    description:
+      "Assembling flat-pack furniture, TV mounting, and wall hanging.",
     price: 75,
     duration: "1 hour",
     image: "🔨",
     rating: "4.6",
     reviewCount: 8,
     providerId: 2,
-    provider: { id: 2, name: "Provider User", businessName: "Pro Services", email: "provider@example.com" },
+    provider: {
+      id: 2,
+      name: "Provider User",
+      businessName: "Pro Services",
+      email: "provider@example.com",
+    },
     isActive: true,
   },
 ];
@@ -138,19 +175,29 @@ const initialBookings = [
   {
     id: "101",
     serviceId: "1",
-    service: { id: "1", title: "Deep Home Cleaning", category: "Home Cleaning", price: 89 },
+    service: {
+      id: "1",
+      title: "Deep Home Cleaning",
+      category: "Home Cleaning",
+      price: 89,
+    },
     customerId: 3,
     customer: { id: 3, name: "Customer User", email: "customer@example.com" },
     providerId: 2,
-    provider: { id: 2, name: "Provider User", businessName: "Pro Services", email: "provider@example.com" },
+    provider: {
+      id: 2,
+      name: "Provider User",
+      businessName: "Pro Services",
+      email: "provider@example.com",
+    },
     date: "2026-08-25",
     time: "10:00 AM",
     address: "123 Main St, Apartment 4B",
     notes: "Please bring eco-friendly products",
     totalPrice: 89,
     status: "confirmed",
-    createdAt: "2026-08-18T10:00:00Z"
-  }
+    createdAt: "2026-08-18T10:00:00Z",
+  },
 ];
 
 function getStored(key, fallback) {
@@ -182,7 +229,9 @@ function getMockFallback(endpoint, options = {}) {
 
     // AUTH
     if (path === "/auth/register" && method === "POST") {
-      const email = String(body.email || "").trim().toLowerCase();
+      const email = String(body.email || "")
+        .trim()
+        .toLowerCase();
       const password = String(body.password || "");
       if (!email || !password) {
         throw new Error("Please provide name, email, and password");
@@ -194,8 +243,10 @@ function getMockFallback(endpoint, options = {}) {
         email,
         role,
         password,
-        businessName: body.businessName || `${body.name || 'Provider'} Services`,
-        serviceCategory: body.serviceCategory || ''
+        businessName:
+          body.businessName || `${body.name || "Provider"} Services`,
+        serviceCategory: body.serviceCategory || "",
+        isActive: true,
       };
       usersMap[email] = user;
       setStored("local_mock_users", usersMap);
@@ -209,7 +260,9 @@ function getMockFallback(endpoint, options = {}) {
     }
 
     if (path === "/auth/login" && method === "POST") {
-      const email = String(body.email || "").trim().toLowerCase();
+      const email = String(body.email || "")
+        .trim()
+        .toLowerCase();
       let user = usersMap[email];
       if (!user) {
         if (!email || !body.password) {
@@ -221,7 +274,7 @@ function getMockFallback(endpoint, options = {}) {
           email,
           role: normalizeRole(body.role),
           password: body.password,
-          businessName: `${email.split("@")[0]} Services`
+          businessName: `${email.split("@")[0]} Services`,
         };
         usersMap[email] = user;
         setStored("local_mock_users", usersMap);
@@ -229,7 +282,9 @@ function getMockFallback(endpoint, options = {}) {
         throw new Error("Invalid email or password");
       }
 
-      const roleToUse = body.role ? normalizeRole(body.role) : normalizeRole(user.role);
+      const roleToUse = body.role
+        ? normalizeRole(body.role)
+        : normalizeRole(user.role);
       if (roleToUse !== user.role) {
         user.role = roleToUse;
         usersMap[email] = user;
@@ -241,7 +296,8 @@ function getMockFallback(endpoint, options = {}) {
         name: user.name,
         email: user.email,
         role: user.role,
-        businessName: user.businessName || `${user.name} Services`
+        businessName: user.businessName || `${user.name} Services`,
+        isActive: user.isActive !== false,
       };
       const token = `mock-${user.role}-token`;
       localStorage.setItem("auth_token", token);
@@ -254,16 +310,99 @@ function getMockFallback(endpoint, options = {}) {
       throw new Error("Not authenticated");
     }
 
-    // PROFILE UPDATES
-    if (path.startsWith("/users/") && method === "PUT" && !path.endsWith("/toggle-status")) {
+    if (path === "/users" && method === "GET") {
+      let result = Object.values(usersMap).map((user) => ({ ...user }));
+      const role = params.get("role");
+      const status = params.get("status");
+      const search = params.get("search");
+
+      if (role) {
+        result = result.filter(
+          (user) =>
+            String(user.role).toLowerCase() === String(role).toLowerCase(),
+        );
+      }
+      if (status === "active") {
+        result = result.filter((user) => user.isActive !== false);
+      } else if (status === "suspended") {
+        result = result.filter((user) => user.isActive === false);
+      }
+      if (search) {
+        const term = search.toLowerCase();
+        result = result.filter((user) =>
+          [user.name, user.email, user.businessName, user.serviceCategory]
+            .filter(Boolean)
+            .some((value) => String(value).toLowerCase().includes(term)),
+        );
+      }
+
+      return result.map((user) => {
+        const normalized = { ...user, isActive: user.isActive !== false };
+        delete normalized.password;
+        return normalized;
+      });
+    }
+
+    if (path.startsWith("/users/") && method === "GET") {
       const userId = path.split("/")[2];
-      const email = Object.keys(usersMap).find((key) => String(usersMap[key].id) === String(userId));
+      const email = Object.keys(usersMap).find(
+        (key) => String(usersMap[key].id) === String(userId),
+      );
       if (!email) throw new Error("User not found");
-      const updatedUser = { ...usersMap[email], ...body, id: usersMap[email].id };
+      const user = {
+        ...usersMap[email],
+        isActive: usersMap[email].isActive !== false,
+      };
+      delete user.password;
+      return user;
+    }
+
+    // PROFILE UPDATES
+    if (
+      path.startsWith("/users/") &&
+      method === "PUT" &&
+      !path.endsWith("/toggle-status")
+    ) {
+      const userId = path.split("/")[2];
+      const email = Object.keys(usersMap).find(
+        (key) => String(usersMap[key].id) === String(userId),
+      );
+      if (!email) throw new Error("User not found");
+      const updatedUser = {
+        ...usersMap[email],
+        ...body,
+        id: usersMap[email].id,
+        isActive: usersMap[email].isActive !== false,
+      };
       delete updatedUser.password;
-      usersMap[email] = { ...usersMap[email], ...body };
+      usersMap[email] = {
+        ...usersMap[email],
+        ...body,
+        isActive: usersMap[email].isActive !== false,
+      };
       setStored("local_mock_users", usersMap);
       return updatedUser;
+    }
+
+    if (
+      path.startsWith("/users/") &&
+      method === "PUT" &&
+      path.endsWith("/toggle-status")
+    ) {
+      const userId = path.split("/")[2];
+      const email = Object.keys(usersMap).find(
+        (key) => String(usersMap[key].id) === String(userId),
+      );
+      if (!email) throw new Error("User not found");
+      usersMap[email] = {
+        ...usersMap[email],
+        isActive: !Boolean(usersMap[email].isActive),
+      };
+      setStored("local_mock_users", usersMap);
+      return {
+        message: `User ${usersMap[email].isActive ? "activated" : "suspended"}`,
+        isActive: usersMap[email].isActive,
+      };
     }
 
     // CATEGORIES
@@ -275,8 +414,19 @@ function getMockFallback(endpoint, options = {}) {
       const categories = getStored("local_categories_data", initialCategories);
       const name = String(body.name || "").trim();
       if (!name) throw new Error("Category name is required");
-      if (categories.some((category) => category.name.toLowerCase() === name.toLowerCase())) throw new Error("Category already exists");
-      const category = { id: Date.now(), name, slug: body.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-"), description: body.description || "", icon: body.icon || "🛠️" };
+      if (
+        categories.some(
+          (category) => category.name.toLowerCase() === name.toLowerCase(),
+        )
+      )
+        throw new Error("Category already exists");
+      const category = {
+        id: Date.now(),
+        name,
+        slug: body.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        description: body.description || "",
+        icon: body.icon || "🛠️",
+      };
       categories.push(category);
       setStored("local_categories_data", categories);
       return category;
@@ -288,7 +438,9 @@ function getMockFallback(endpoint, options = {}) {
       if (params.get("mine") === "true") {
         if (currentUser) {
           const filtered = services.filter(
-            (s) => String(s.providerId) === String(currentUser.id) || s.provider?.email === currentUser.email
+            (s) =>
+              String(s.providerId) === String(currentUser.id) ||
+              s.provider?.email === currentUser.email,
           );
           return filtered;
         }
@@ -296,7 +448,9 @@ function getMockFallback(endpoint, options = {}) {
       }
       if (params.get("category")) {
         const cat = params.get("category").toLowerCase();
-        services = services.filter((s) => String(s.category).toLowerCase() === cat);
+        services = services.filter(
+          (s) => String(s.category).toLowerCase() === cat,
+        );
       }
       return services;
     }
@@ -319,7 +473,9 @@ function getMockFallback(endpoint, options = {}) {
         provider: {
           id: providerId,
           name: currentUser?.name || "Provider User",
-          businessName: currentUser?.businessName || `${currentUser?.name || "Provider"} Services`,
+          businessName:
+            currentUser?.businessName ||
+            `${currentUser?.name || "Provider"} Services`,
           email: currentUser?.email || "provider@example.com",
         },
         isActive: true,
@@ -332,7 +488,9 @@ function getMockFallback(endpoint, options = {}) {
     if (path.startsWith("/services/")) {
       const serviceId = path.split("/")[2];
       let services = getStored("local_services_data", initialServices);
-      const index = services.findIndex((s) => String(s.id) === String(serviceId));
+      const index = services.findIndex(
+        (s) => String(s.id) === String(serviceId),
+      );
 
       if (method === "GET") {
         if (index >= 0) return services[index];
@@ -340,7 +498,11 @@ function getMockFallback(endpoint, options = {}) {
       }
       if (method === "PUT") {
         if (index >= 0) {
-          services[index] = { ...services[index], ...body, price: parseFloat(body.price || services[index].price) };
+          services[index] = {
+            ...services[index],
+            ...body,
+            price: parseFloat(body.price || services[index].price),
+          };
           setStored("local_services_data", services);
           return services[index];
         }
@@ -361,13 +523,17 @@ function getMockFallback(endpoint, options = {}) {
       let bookings = getStored("local_bookings_data", initialBookings);
       if (currentUser?.role === "provider") {
         const filtered = bookings.filter(
-          (b) => String(b.providerId) === String(currentUser.id) || b.provider?.email === currentUser.email
+          (b) =>
+            String(b.providerId) === String(currentUser.id) ||
+            b.provider?.email === currentUser.email,
         );
         return filtered.length > 0 ? filtered : bookings;
       }
       if (currentUser?.role === "customer") {
         const filtered = bookings.filter(
-          (b) => String(b.customerId) === String(currentUser.id) || b.customer?.email === currentUser.email
+          (b) =>
+            String(b.customerId) === String(currentUser.id) ||
+            b.customer?.email === currentUser.email,
         );
         return filtered;
       }
@@ -377,7 +543,9 @@ function getMockFallback(endpoint, options = {}) {
     if (path === "/bookings" && method === "POST") {
       const bookings = getStored("local_bookings_data", initialBookings);
       const services = getStored("local_services_data", initialServices);
-      const service = services.find((s) => String(s.id) === String(body.serviceId));
+      const service = services.find(
+        (s) => String(s.id) === String(body.serviceId),
+      );
 
       const providerId = service?.providerId || body.providerId || 2;
       const providerInfo = service?.provider || {
@@ -391,8 +559,17 @@ function getMockFallback(endpoint, options = {}) {
         id: String(Date.now()),
         serviceId: body.serviceId,
         service: service
-          ? { id: service.id, title: service.title, category: service.category, price: service.price }
-          : { id: body.serviceId, title: "Requested Service", price: body.totalPrice || 0 },
+          ? {
+              id: service.id,
+              title: service.title,
+              category: service.category,
+              price: service.price,
+            }
+          : {
+              id: body.serviceId,
+              title: "Requested Service",
+              price: body.totalPrice || 0,
+            },
         customerId: currentUser?.id || 3,
         customer: {
           id: currentUser?.id || 3,
@@ -418,7 +595,9 @@ function getMockFallback(endpoint, options = {}) {
     if (path.startsWith("/bookings/")) {
       const bookingId = path.split("/")[2];
       let bookings = getStored("local_bookings_data", initialBookings);
-      const index = bookings.findIndex((b) => String(b.id) === String(bookingId));
+      const index = bookings.findIndex(
+        (b) => String(b.id) === String(bookingId),
+      );
 
       if (method === "GET") {
         if (index >= 0) return bookings[index];
@@ -431,9 +610,16 @@ function getMockFallback(endpoint, options = {}) {
 
           if (body.status === "confirmed" || body.status === "completed") {
             const payments = getStored("local_payments_data", [
-              { id: "p1", bookingId: "101", amount: 89, paidAt: new Date().toISOString() },
+              {
+                id: "p1",
+                bookingId: "101",
+                amount: 89,
+                paidAt: new Date().toISOString(),
+              },
             ]);
-            if (!payments.some((p) => String(p.bookingId) === String(bookingId))) {
+            if (
+              !payments.some((p) => String(p.bookingId) === String(bookingId))
+            ) {
               payments.unshift({
                 id: String(Date.now()),
                 bookingId: bookingId,
@@ -458,14 +644,24 @@ function getMockFallback(endpoint, options = {}) {
     // PAYMENTS
     if (path === "/payments" && method === "GET") {
       let payments = getStored("local_payments_data", [
-        { id: "p1", bookingId: "101", amount: 89, customer: { name: "Customer User" }, paidAt: new Date().toISOString() },
+        {
+          id: "p1",
+          bookingId: "101",
+          amount: 89,
+          customer: { name: "Customer User" },
+          paidAt: new Date().toISOString(),
+        },
       ]);
       return payments;
     }
 
     if (path === "/payments" && method === "POST") {
       let payments = getStored("local_payments_data", []);
-      const newPayment = { id: String(Date.now()), ...body, paidAt: new Date().toISOString() };
+      const newPayment = {
+        id: String(Date.now()),
+        ...body,
+        paidAt: new Date().toISOString(),
+      };
       payments.unshift(newPayment);
       setStored("local_payments_data", payments);
       return newPayment;
@@ -474,13 +670,23 @@ function getMockFallback(endpoint, options = {}) {
     // REVIEWS
     if (path === "/reviews" && method === "GET") {
       return getStored("local_reviews_data", [
-        { id: "r1", rating: 5, comment: "Great service and very professional!", customer: { name: "Customer User" }, service: { title: "Deep Home Cleaning" } },
+        {
+          id: "r1",
+          rating: 5,
+          comment: "Great service and very professional!",
+          customer: { name: "Customer User" },
+          service: { title: "Deep Home Cleaning" },
+        },
       ]);
     }
 
     if (path === "/reviews" && method === "POST") {
       let reviews = getStored("local_reviews_data", []);
-      const newReview = { id: String(Date.now()), ...body, customer: { name: currentUser?.name || "Customer User" } };
+      const newReview = {
+        id: String(Date.now()),
+        ...body,
+        customer: { name: currentUser?.name || "Customer User" },
+      };
       reviews.unshift(newReview);
       setStored("local_reviews_data", reviews);
       return newReview;
@@ -489,13 +695,30 @@ function getMockFallback(endpoint, options = {}) {
     // FAVORITES
     if (path === "/favorites" && method === "GET") {
       return getStored("local_favorites_data", [
-        { id: "f1", provider: { id: 2, name: "Provider User", businessName: "Pro Services", rating: "4.9", serviceCategory: "Home Services" } },
+        {
+          id: "f1",
+          provider: {
+            id: 2,
+            name: "Provider User",
+            businessName: "Pro Services",
+            rating: "4.9",
+            serviceCategory: "Home Services",
+          },
+        },
       ]);
     }
 
     if (path === "/favorites" && method === "POST") {
       let favorites = getStored("local_favorites_data", []);
-      const newFav = { id: String(Date.now()), providerId: body.providerId, provider: { id: body.providerId, name: "Provider User", businessName: "Pro Services" } };
+      const newFav = {
+        id: String(Date.now()),
+        providerId: body.providerId,
+        provider: {
+          id: body.providerId,
+          name: "Provider User",
+          businessName: "Pro Services",
+        },
+      };
       favorites.push(newFav);
       setStored("local_favorites_data", favorites);
       return newFav;
@@ -504,7 +727,11 @@ function getMockFallback(endpoint, options = {}) {
     if (path.startsWith("/favorites/") && method === "DELETE") {
       const providerId = path.split("/")[2];
       let favorites = getStored("local_favorites_data", []);
-      favorites = favorites.filter((f) => String(f.providerId) !== String(providerId) && String(f.provider?.id) !== String(providerId));
+      favorites = favorites.filter(
+        (f) =>
+          String(f.providerId) !== String(providerId) &&
+          String(f.provider?.id) !== String(providerId),
+      );
       setStored("local_favorites_data", favorites);
       return { success: true };
     }
@@ -512,7 +739,13 @@ function getMockFallback(endpoint, options = {}) {
     // NOTIFICATIONS
     if (path === "/notifications" && method === "GET") {
       return getStored("local_notifications_data", [
-        { id: "n1", title: "New Booking", message: "You have a new service request.", read: false, createdAt: new Date().toISOString() },
+        {
+          id: "n1",
+          title: "New Booking",
+          message: "You have a new service request.",
+          read: false,
+          createdAt: new Date().toISOString(),
+        },
       ]);
     }
 
@@ -574,7 +807,8 @@ export const authAPI = {
 // Categories
 export const categoryAPI = {
   getAll: () => request("/categories"),
-  create: (data) => request("/categories", { method: "POST", body: JSON.stringify(data) }),
+  create: (data) =>
+    request("/categories", { method: "POST", body: JSON.stringify(data) }),
 };
 
 // Services

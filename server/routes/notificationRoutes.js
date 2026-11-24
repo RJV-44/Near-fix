@@ -13,7 +13,7 @@ const { protect, authorize } = require("../middleware/auth");
 router.get("/", protect, getNotifications);
 router.get("/unread-count", protect, getUnreadCount);
 router.post("/contact", createContactMessage);
-router.post("/", protect, authorize("admin", "system"), createNotification);
+router.post("/", protect, authorize("admin"), createNotification);
 router.put("/:id/read", protect, markAsRead);
 router.put("/read-all", protect, markAllAsRead);
 

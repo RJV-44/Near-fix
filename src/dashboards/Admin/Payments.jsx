@@ -19,9 +19,9 @@ function Payments() {
 
   return <AdminLayout title="Payments" subtitle="Review payments, provider payouts, and refunds.">
     <section className="stat-grid compact">
-      <article className="stat-card"><p>Revenue</p><h2>${totalRevenue.toFixed(2)}</h2></article>
-      <article className="stat-card"><p>Pending payouts</p><h2>${pendingPayouts.toFixed(2)}</h2></article>
-      <article className="stat-card"><p>Refunds issued</p><h2>${refunded.toFixed(2)}</h2></article>
+      <article className="stat-card"><p>Revenue</p><h2>₹{totalRevenue.toFixed(2)}</h2></article>
+      <article className="stat-card"><p>Pending payouts</p><h2>₹{pendingPayouts.toFixed(2)}</h2></article>
+      <article className="stat-card"><p>Refunds issued</p><h2>₹{refunded.toFixed(2)}</h2></article>
     </section>
     <section className="panel">
       <div className="panel-heading"><div><h2>Payment history</h2><p>{payments.length} transactions</p></div><button className="secondary-button">Download report</button></div>
@@ -31,7 +31,7 @@ function Payments() {
          payments.map(p => <tr key={p.id}>
            <td>#{p.id}</td>
            <td>{p.customer?.name || 'N/A'}</td>
-           <td>${parseFloat(p.amount || 0).toFixed(2)}</td>
+           <td>₹{parseFloat(p.amount || 0).toFixed(2)}</td>
            <td>{p.paidAt ? new Date(p.paidAt).toLocaleDateString() : p.createdAt?.split('T')[0] || '—'}</td>
            <td><span className={`status status-${p.status?.toLowerCase() || 'pending'}`}>{p.status || 'Pending'}</span></td>
          </tr>)}

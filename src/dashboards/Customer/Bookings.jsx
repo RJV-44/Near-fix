@@ -32,7 +32,7 @@ function Bookings() {
          <div>
            <strong>{b.service?.title || 'Service'}</strong>
            <p>{b.provider?.businessName || b.provider?.name || 'Provider'}</p>
-           <small>{b.date} {b.time || ''} · ${parseFloat(b.totalPrice || 0).toFixed(2)}</small>
+           <small>{b.date} {b.time || ''} · ₹{parseFloat(b.totalPrice || 0).toFixed(2)}</small>
          </div>
          <div>
            <span className={`status status-${b.status?.toLowerCase() || 'pending'}`}>{b.status || 'Pending'}</span>

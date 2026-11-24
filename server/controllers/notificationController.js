@@ -26,7 +26,9 @@ const getUnreadCount = async (req, res) => {
 
 const markAsRead = async (req, res) => {
   try {
-    const notification = await Notification.findByPk(req.params.id);
+    const notification = await Notification.findOne({
+      where: { id: req.params.id, userId: req.user.id },
+    });
     if (!notification)
       return res.status(404).json({ message: "Notification not found" });
     await notification.update({ isRead: true });
@@ -51,6 +53,20 @@ const markAllAsRead = async (req, res) => {
 const createNotification = async (req, res) => {
   try {
     const { userId, title, message, type, relatedId, relatedModel } = req.body;
+
+    if (!title || !message) {
+      return res.status(400).json({
+        message: "Title and message are required",
+      });
+    }
+
+    if (userId != null) {
+      const recipient = await User.findByPk(userId);
+      if (!recipient) {
+        return res.status(404).json({ message: "Notification recipient not found" });
+      }
+    }
+
     const notification = await Notification.create({
       userId,
       title,

@@ -54,7 +54,7 @@ function Dashboard() {
         <StatCard icon="📋" label="New Requests" value={stats.requests.toString()} trend={stats.requests > 0 ? 'Action needed' : undefined} color="#fff7ed" />
         <StatCard icon="🔵" label="Confirmed" value={stats.confirmed.toString()} color="#eff6ff" />
         <StatCard icon="✅" label="Completed" value={stats.completed.toString()} color="#f0fdf4" />
-        <StatCard icon="💰" label="Total Earnings" value={`$${stats.earnings.toFixed(0)}`} color="#fefce8" />
+        <StatCard icon="💰" label="Total Earnings" value={`₹${stats.earnings.toFixed(0)}`} color="#fefce8" />
         <StatCard icon="⭐" label="Avg Rating" value={stats.rating > 0 ? stats.rating.toFixed(1) : '—'} color="#fdf4ff" />
       </section>
 
@@ -81,7 +81,7 @@ function Dashboard() {
                       <td><strong>{b.customer?.name || 'Customer'}</strong><div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{b.customer?.email || ''}</div></td>
                       <td>{b.service?.title || 'Service'}</td>
                       <td>{b.date}<div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{b.time}</div></td>
-                      <td><strong>${parseFloat(b.totalPrice || 0).toFixed(0)}</strong></td>
+                      <td><strong>₹{parseFloat(b.totalPrice || 0).toFixed(0)}</strong></td>
                       <td><span className={`status status-${b.status || 'pending'}`}>{b.status || 'Pending'}</span></td>
                     </tr>
                   ))

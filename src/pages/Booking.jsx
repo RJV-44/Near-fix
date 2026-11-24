@@ -103,7 +103,7 @@ function Booking() {
             </label>
             <div className="booking-total">
               <span>Service total</span>
-              <strong>{service ? `$${parseFloat(service.price).toFixed(2)}` : '—'}</strong>
+              <strong>{service ? `₹${parseFloat(service.price).toFixed(2)}` : '—'}</strong>
             </div>
             <button className="primary-button" type="submit" disabled={submitting}>
               {submitting ? 'Confirming booking...' : isAuthenticated ? 'Confirm Booking Request' : 'Log in to Confirm Booking'}

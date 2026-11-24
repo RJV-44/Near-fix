@@ -38,7 +38,7 @@ function MyServices() {
            <span className={`status status-${s.isActive ? 'active' : 'draft'}`}>{s.isActive ? 'Active' : 'Draft'}</span>
            <h3>{s.title}</h3>
            <p className="service-category">{s.category}</p>
-           <p>From ${parseFloat(s.price).toFixed(0)} · {s.duration || '—'}</p>
+           <p>From ₹{parseFloat(s.price).toFixed(0)} · {s.duration || '—'}</p>
            <div className="service-card-actions">
              <a className="text-button" href={`#provider-edit-service?id=${s.id}`}>Edit</a>
              <button className="text-button danger" onClick={() => handleDelete(s.id, s.title)}>Delete</button>

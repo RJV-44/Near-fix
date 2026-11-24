@@ -23,7 +23,7 @@ function BookingHistory() {
            <td><strong>{b.service?.title || 'Service'}</strong></td>
            <td>{b.provider?.businessName || b.provider?.name || 'Provider'}</td>
            <td>{b.date}</td>
-           <td>${parseFloat(b.totalPrice || 0).toFixed(2)}</td>
+           <td>₹{parseFloat(b.totalPrice || 0).toFixed(2)}</td>
            <td><span className={`status status-${b.status?.toLowerCase() || 'completed'}`}>{b.status || 'Completed'}</span></td>
          </tr>)}
       </tbody></table></div>
