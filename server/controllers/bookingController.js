@@ -30,6 +30,16 @@ const getBookingById = async (req, res) => {
       ],
     })
     if (!booking) return res.status(404).json({ message: 'Booking not found' })
+
+    // Authorization check: must be customer, provider, or admin
+    if (
+      req.user.role !== 'admin' &&
+      booking.customerId !== req.user.id &&
+      booking.providerId !== req.user.id
+    ) {
+      return res.status(403).json({ message: 'Not authorized to view this booking' })
+    }
+
     res.json(booking)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -50,6 +60,16 @@ const updateBookingStatus = async (req, res) => {
   try {
     const booking = await Booking.findByPk(req.params.id)
     if (!booking) return res.status(404).json({ message: 'Booking not found' })
+
+    // Authorization check: must be customer, provider, or admin
+    if (
+      req.user.role !== 'admin' &&
+      booking.customerId !== req.user.id &&
+      booking.providerId !== req.user.id
+    ) {
+      return res.status(403).json({ message: 'Not authorized to modify this booking' })
+    }
+
     if (req.body.status) booking.status = req.body.status
     if (req.body.paymentStatus) booking.paymentStatus = req.body.paymentStatus
     await booking.save()

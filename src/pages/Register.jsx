@@ -25,7 +25,7 @@ function Register() {
   return <div className="public-page"><Navbar onLogin={() => { window.location.hash = '#login' }} />
     <main className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <a href="#home" className="back-link">? Back to home</a>
+        <a href="#home" className="back-link">← Back to home</a>
         <h1>Create your account</h1>
         <p>Join thousands of people who book trusted local help.</p>
         {error && <small className="form-error">{error}</small>}

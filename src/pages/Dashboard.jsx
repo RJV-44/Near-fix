@@ -7,9 +7,9 @@ function Dashboard() {
   const { isAuthenticated, user } = useAuth()
 
   const dashboards = [
-    ['Admin portal', 'Manage users, providers, bookings, and platform reports.', '#admin-dashboard', '???'],
-    ['Customer portal', 'Manage your profile, bookings, payments, and favorite providers.', '#customer-dashboard', '??'],
-    ['Provider portal', 'Manage services, schedule, earnings, and customer reviews.', '#provider-dashboard', '??'],
+    ['Admin portal', 'Manage users, providers, bookings, and platform reports.', '#admin-dashboard', '🛡️'],
+    ['Customer portal', 'Manage your profile, bookings, payments, and favorite providers.', '#customer-dashboard', '👤'],
+    ['Provider portal', 'Manage services, schedule, earnings, and customer reviews.', '#provider-dashboard', '🛠️'],
   ]
 
   return <div className="public-page"><Navbar onLogin={() => { window.location.hash = '#login' }} />

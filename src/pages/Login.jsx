@@ -33,7 +33,7 @@ function Login() {
   return <div className="public-page"><Navbar onRegister={() => { window.location.hash = '#register' }} />
     <main className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <a href="#home" className="back-link">? Back to home</a>
+        <a href="#home" className="back-link">← Back to home</a>
         <h1>Welcome back</h1>
         <p>Log in to manage your bookings and account.</p>
         {error && <small className="form-error">{error}</small>}
@@ -58,7 +58,7 @@ function Login() {
         </button>
         {submitted && !error && <small className="form-success">Logging you in as {role}...</small>}
         <p className="auth-switch">New to Local Services? <a href="#register">Create an account</a></p>
-        <p className="auth-switch"><a href="#admin-login">Admin login ?</a></p>
+        <p className="auth-switch"><a href="#admin-login">Admin login →</a></p>
       </form>
     </main>
  <Footer /></div>
