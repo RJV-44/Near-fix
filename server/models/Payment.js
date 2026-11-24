@@ -9,9 +9,10 @@ const Payment = sequelize.define('Payment', {
   amount: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   fee: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0 },
   netAmount: { type: DataTypes.DECIMAL(10, 2) },
-  method: { type: DataTypes.ENUM('card', 'cash', 'online'), defaultValue: 'card' },
+  method: { type: DataTypes.ENUM('card', 'cash', 'online', 'upi'), defaultValue: 'upi' },
   status: { type: DataTypes.ENUM('pending', 'paid', 'refunded', 'failed'), defaultValue: 'pending' },
   transactionId: { type: DataTypes.STRING },
+  upiId: { type: DataTypes.STRING },
   paidAt: { type: DataTypes.DATE },
 }, { timestamps: true })
 

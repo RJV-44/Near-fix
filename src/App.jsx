@@ -77,21 +77,24 @@ function Router() {
     return () => window.removeEventListener('hashchange', updateRoute)
   }, [hash])
 
+  // Extract base route path without query parameters (e.g. "#booking?serviceId=1" -> "#booking")
+  const routePath = hash.split('?')[0] || '#home'
+
   // When user becomes authenticated, redirect to their dashboard if still on login
   useEffect(() => {
-    if (isAuthenticated && user && (hash === '#login' || hash === '#admin-login' || hash === '#home')) {
+    if (isAuthenticated && user && (routePath === '#login' || routePath === '#admin-login' || routePath === '#home')) {
       const target = getDashboardHash(user.role)
-      if (hash !== target) {
+      if (routePath !== target) {
         setHash(target)
         window.location.hash = target
       }
     }
-  }, [isAuthenticated, user, hash, getDashboardHash])
+  }, [isAuthenticated, user, routePath, getDashboardHash])
 
   // Wait for auth check before rendering protected routes
   if (loading) return null
 
-  const Page = allRoutes[hash]
+  const Page = allRoutes[routePath]
 
   if (!Page) {
     window.location.hash = '#home'
@@ -99,7 +102,7 @@ function Router() {
   }
 
   // Public routes - always accessible
-  if (publicRoutes[hash]) return <Page />
+  if (publicRoutes[routePath]) return <Page />
   // Protected routes - check authentication
   if (!isAuthenticated) {
     window.location.hash = '#login'
@@ -107,19 +110,19 @@ function Router() {
   }
 
   // Admin routes - require admin role
-  if (adminRoutes[hash] && user?.role !== 'admin') {
+  if (adminRoutes[routePath] && user?.role !== 'admin') {
     window.location.hash = '#home'
     return null
   }
 
   // Customer routes - require customer role
-  if (customerRoutes[hash] && user?.role !== 'customer') {
+  if (customerRoutes[routePath] && user?.role !== 'customer') {
     window.location.hash = '#home'
     return null
   }
 
   // Provider routes - require provider role
-  if (providerRoutes[hash] && user?.role !== 'provider') {
+  if (providerRoutes[routePath] && user?.role !== 'provider') {
     window.location.hash = '#home'
     return null
   }

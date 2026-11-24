@@ -4,15 +4,21 @@ Local Services is a full-stack marketplace platform that connects customers with
 
 ## Features
 
-- User registration and login for customer, provider, and admin roles
-- Service listing and category-based browsing
-- Provider profile and service management
-- Booking creation and booking status tracking
-- Reviews and ratings
-- Favorites and notifications
-- Payment records and payout support
-- Admin dashboard with tables and analytics
-- Responsive frontend UI for desktop and mobile
+- User registration and login for customer, provider, and admin roles with role-based access control
+- Service catalog with search, filtering, and category-based browsing
+- Provider profile and service listings (add, edit, active/inactive toggles)
+- Appointment booking engine with real-time past-date validation
+- **Direct UPI Payment Gateway Integration**:
+  - Dynamically generated NPCI-compliant QR code (scalable SVG, zero external library overhead)
+  - One-click UPI VPA copy
+  - 12-digit UPI UTR / Reference ID verification & instant status synchronization
+  - Unpaid booking payment from customer dashboard
+- Multi-role dashboards:
+  - **Customer Dashboard**: Overview, My Bookings, Booking History, Payments, Reviews, Favorites, Notifications, Profile, Settings
+  - **Provider Dashboard**: Overview, My Services, Bookings, Earnings, Reviews, Notifications, Profile, Settings
+  - **Admin Dashboard**: Overview, Users, Providers, Services, Bookings, Payments, Reviews, Reports & Analytics, System Settings
+- Offline-ready API layer with graceful fallback to localStorage when backend database is disconnected
+- Fully responsive modern UI for desktop, tablet, and mobile browsers
 
 ## Tech Stack
 
