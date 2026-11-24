@@ -27,7 +27,12 @@ export function AuthProvider({ children }) {
 
     try {
       const parsed = JSON.parse(stored)
-      return { ...parsed, role: normalizeRole(parsed?.role) }
+      const compactUser = { ...parsed, role: normalizeRole(parsed?.role) }
+      if (typeof compactUser.avatar === 'string' && compactUser.avatar.startsWith('data:') && compactUser.avatar.length >= 200000) {
+        delete compactUser.avatar
+        localStorage.setItem('auth_user', JSON.stringify(compactUser))
+      }
+      return compactUser
     } catch {
       return null
     }
@@ -57,7 +62,9 @@ export function AuthProvider({ children }) {
   const login = (userData) => {
     const normalizedUser = { ...userData, role: normalizeRole(userData?.role) }
     setUser(normalizedUser)
-    localStorage.setItem('auth_user', JSON.stringify(normalizedUser))
+    const storageUser = { ...normalizedUser }
+    if (typeof storageUser.avatar === 'string' && storageUser.avatar.startsWith('data:') && storageUser.avatar.length >= 200000) delete storageUser.avatar
+    localStorage.setItem('auth_user', JSON.stringify(storageUser))
   }
 
   const logout = () => {

@@ -41,8 +41,8 @@ const updateUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
-    const { name, email, phone, role } = req.body;
-    await user.update({ name, email, phone, role });
+    const { name, email, phone, role, businessName, serviceCategory, yearsOfExperience, avatar } = req.body;
+    await user.update({ name, email, phone, role, businessName, serviceCategory, yearsOfExperience, avatar });
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -14,6 +14,7 @@ function Footer() {
         <h4>Explore</h4>
         <a href="#services">Find Services</a>
         <a href="#about">About Us</a>
+        <a href="#how-to-use">How to use the platform</a>
         <a href="#contact">Contact</a>
         <a href="#home">Homepage</a>
       </div>

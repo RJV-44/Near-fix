@@ -13,29 +13,24 @@ function Hero({ onSearch }) {
   return (
     <section className="hero-section">
       <div className="hero-copy">
-        <p className="hero-eyebrow">✦ Services, Simplified</p>
-        <h1>Find trusted help <span>near you.</span></h1>
-        <p>Book reliable local professionals for every task around your home and business. Fast, easy, and verified.</p>
+        <p className="hero-eyebrow">SERVICES, SIMPLIFIED</p>
+        <h1>Good help is closer than you think.</h1>
+        <p>Book reliable local professionals for home, business, and everyday tasks. Clear choices, verified providers, and simple scheduling.</p>
         <SearchBar value={query} onChange={setQuery} onSearch={onSearch} />
         <div className="hero-trust">
-          <span>✅ Verified providers</span>
-          <span>⭐ Highly rated</span>
-          <span>📅 Easy booking</span>
-          <span>🔒 Secure payments</span>
+          <span>Verified providers</span>
+          <span>Highly rated</span>
+          <span>Easy booking</span>
+          <span>Secure payments</span>
         </div>
-        <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(99,102,241,0.15)' }}>
-          {stats.map(({ value, label }) => (
-            <div key={label}>
-              <div style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--brand)', letterSpacing: '-0.04em' }}>{value}</div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 500 }}>{label}</div>
-            </div>
-          ))}
+        <div className="hero-stats">
+          {stats.map(({ value, label }) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
         </div>
       </div>
 
       <div className="hero-art" aria-hidden="true">
-        <div>🏘️</div>
-        <span>Trusted Local Pros</span>
+        <div className="hero-art-icon">LOCAL<br />HELP</div>
+        <span>Trusted local pros</span>
         <div style={{
           position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1.5rem',
           background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)',

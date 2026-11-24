@@ -254,9 +254,32 @@ function getMockFallback(endpoint, options = {}) {
       throw new Error("Not authenticated");
     }
 
+    // PROFILE UPDATES
+    if (path.startsWith("/users/") && method === "PUT" && !path.endsWith("/toggle-status")) {
+      const userId = path.split("/")[2];
+      const email = Object.keys(usersMap).find((key) => String(usersMap[key].id) === String(userId));
+      if (!email) throw new Error("User not found");
+      const updatedUser = { ...usersMap[email], ...body, id: usersMap[email].id };
+      delete updatedUser.password;
+      usersMap[email] = { ...usersMap[email], ...body };
+      setStored("local_mock_users", usersMap);
+      return updatedUser;
+    }
+
     // CATEGORIES
     if (path === "/categories" && method === "GET") {
-      return initialCategories;
+      return getStored("local_categories_data", initialCategories);
+    }
+
+    if (path === "/categories" && method === "POST") {
+      const categories = getStored("local_categories_data", initialCategories);
+      const name = String(body.name || "").trim();
+      if (!name) throw new Error("Category name is required");
+      if (categories.some((category) => category.name.toLowerCase() === name.toLowerCase())) throw new Error("Category already exists");
+      const category = { id: Date.now(), name, slug: body.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-"), description: body.description || "", icon: body.icon || "🛠️" };
+      categories.push(category);
+      setStored("local_categories_data", categories);
+      return category;
     }
 
     // SERVICES
@@ -551,6 +574,7 @@ export const authAPI = {
 // Categories
 export const categoryAPI = {
   getAll: () => request("/categories"),
+  create: (data) => request("/categories", { method: "POST", body: JSON.stringify(data) }),
 };
 
 // Services

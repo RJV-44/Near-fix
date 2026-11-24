@@ -10,7 +10,9 @@ import ServiceDetails from './pages/ServiceDetails.jsx'
 import Booking from './pages/Booking.jsx'
 import PublicDashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
+import HowToUsePlatform from './pages/HowToUsePlatform.jsx'
 import Contact from './pages/Contact.jsx'
+import Providers from './pages/Providers.jsx'
 import AdminDashboard from './dashboards/Admin/Dashboard.jsx'
 import AdminUsers from './dashboards/Admin/Users.jsx'
 import AdminProviders from './dashboards/Admin/Providers.jsx'
@@ -34,6 +36,7 @@ import ProviderDashboard from './dashboards/Provider/Dashboard.jsx'
 import ProviderProfile from './dashboards/Provider/Profile.jsx'
 import ProviderMyServices from './dashboards/Provider/MyServices.jsx'
 import ProviderAddService from './dashboards/Provider/AddService.jsx'
+import ProviderAddCategory from './dashboards/Provider/AddCategory.jsx'
 import ProviderEditService from './dashboards/Provider/EditService.jsx'
 import ProviderBookings from './dashboards/Provider/Bookings.jsx'
 import ProviderEarnings from './dashboards/Provider/Earnings.jsx'
@@ -43,7 +46,7 @@ import ProviderSettings from './dashboards/Provider/Settings.jsx'
 
 const publicRoutes = {
   '#home': Home, '#login': Login, '#register': Register, '#provider-register': ProviderRegister, '#admin-login': AdminLogin,
-  '#services': Services, '#service-details': ServiceDetails, '#booking': Booking, '#dashboard': PublicDashboard, '#about': About, '#contact': Contact,
+  '#services': Services, '#service-details': ServiceDetails, '#booking': Booking, '#dashboard': PublicDashboard, '#about': About, '#how-to-use': HowToUsePlatform, '#contact': Contact, '#providers': Providers,
 }
 
 const adminRoutes = {
@@ -60,7 +63,7 @@ const customerRoutes = {
 
 const providerRoutes = {
   '#provider-dashboard': ProviderDashboard, '#provider-profile': ProviderProfile, '#provider-my-services': ProviderMyServices,
-  '#provider-add-service': ProviderAddService, '#provider-edit-service': ProviderEditService, '#provider-bookings': ProviderBookings,
+  '#provider-add-service': ProviderAddService, '#provider-add-category': ProviderAddCategory, '#provider-edit-service': ProviderEditService, '#provider-bookings': ProviderBookings,
   '#provider-earnings': ProviderEarnings, '#provider-reviews': ProviderReviews, '#provider-notifications': ProviderNotifications,
   '#provider-settings': ProviderSettings,
 }
@@ -91,7 +94,8 @@ function Router() {
   // Wait for auth check before rendering protected routes
   if (loading) return null
 
-  const Page = allRoutes[hash]
+  const routeHash = hash.split('?')[0]
+  const Page = allRoutes[routeHash]
 
   if (!Page) {
     window.location.hash = '#home'
@@ -99,7 +103,7 @@ function Router() {
   }
 
   // Public routes - always accessible
-  if (publicRoutes[hash]) return <Page />
+  if (publicRoutes[routeHash]) return <Page />
   // Protected routes - check authentication
   if (!isAuthenticated) {
     window.location.hash = '#login'
@@ -107,19 +111,19 @@ function Router() {
   }
 
   // Admin routes - require admin role
-  if (adminRoutes[hash] && user?.role !== 'admin') {
+  if (adminRoutes[routeHash] && user?.role !== 'admin') {
     window.location.hash = '#home'
     return null
   }
 
   // Customer routes - require customer role
-  if (customerRoutes[hash] && user?.role !== 'customer') {
+  if (customerRoutes[routeHash] && user?.role !== 'customer') {
     window.location.hash = '#home'
     return null
   }
 
   // Provider routes - require provider role
-  if (providerRoutes[hash] && user?.role !== 'provider') {
+  if (providerRoutes[routeHash] && user?.role !== 'provider') {
     window.location.hash = '#home'
     return null
   }

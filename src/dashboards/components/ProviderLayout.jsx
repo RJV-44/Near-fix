@@ -5,6 +5,7 @@ const navLinks = [
   { label: 'Dashboard', icon: '🏠', hash: 'provider-dashboard' },
   { label: 'My Services', icon: '🛠️', hash: 'provider-my-services' },
   { label: 'Add Service', icon: '➕', hash: 'provider-add-service' },
+  { label: 'Add Category', icon: '🏷️', hash: 'provider-add-category' },
   { label: 'Bookings', icon: '📋', hash: 'provider-bookings' },
   { label: 'Earnings', icon: '💰', hash: 'provider-earnings' },
   { label: 'Reviews', icon: '⭐', hash: 'provider-reviews' },
