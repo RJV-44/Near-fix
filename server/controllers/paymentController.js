@@ -39,11 +39,43 @@ const getPaymentStats = async (req, res) => {
   }
 }
 
+const getUpiConfig = async (req, res) => {
+  try {
+    const upiId = process.env.UPI_ID || 'nearfix@okaxis'
+    const payeeName = process.env.UPI_PAYEE_NAME || 'NearFix Services'
+    const currency = 'INR'
+    res.json({ upiId, payeeName, currency })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 const createPayment = async (req, res) => {
   try {
-    const { bookingId, customerId, providerId, amount, method } = req.body
+    const { bookingId, customerId, providerId, amount, method, transactionId, upiId } = req.body
     const fee = amount * 0.05
-    const payment = await Payment.create({ bookingId, customerId, providerId, amount, fee, netAmount: amount - fee, method, status: 'paid', paidAt: new Date() })
+    const payment = await Payment.create({
+      bookingId,
+      customerId: customerId || req.user.id,
+      providerId,
+      amount,
+      fee,
+      netAmount: amount - fee,
+      method: method || 'upi',
+      status: 'paid',
+      transactionId: transactionId || null,
+      upiId: upiId || null,
+      paidAt: new Date(),
+    })
+
+    if (bookingId) {
+      const booking = await Booking.findByPk(bookingId)
+      if (booking) {
+        booking.paymentStatus = 'paid'
+        await booking.save()
+      }
+    }
+
     res.status(201).json(payment)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -61,4 +93,4 @@ const processRefund = async (req, res) => {
   }
 }
 
-module.exports = { getPayments, getPaymentStats, createPayment, processRefund }
+module.exports = { getPayments, getPaymentStats, getUpiConfig, createPayment, processRefund }

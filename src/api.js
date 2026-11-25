@@ -727,12 +727,23 @@ function getMockFallback(endpoint, options = {}) {
     }
 
     // PAYMENTS
+    if (path === "/payments/upi-config" && method === "GET") {
+      return {
+        upiId: "nearfix@okaxis",
+        payeeName: "NearFix Services",
+        currency: "INR",
+      };
+    }
+
     if (path === "/payments" && method === "GET") {
       let payments = getStored("local_payments_data", [
         {
           id: "p1",
           bookingId: "101",
           amount: 89,
+          method: "upi",
+          status: "paid",
+          transactionId: "UPI987654321098",
           customer: { name: "Customer User" },
           paidAt: new Date().toISOString(),
         },
@@ -744,11 +755,28 @@ function getMockFallback(endpoint, options = {}) {
       let payments = getStored("local_payments_data", []);
       const newPayment = {
         id: String(Date.now()),
+        method: body.method || "upi",
+        status: "paid",
+        transactionId: body.transactionId || null,
+        upiId: body.upiId || "nearfix@okaxis",
         ...body,
         paidAt: new Date().toISOString(),
       };
       payments.unshift(newPayment);
       setStored("local_payments_data", payments);
+
+      // If bookingId is provided, mark booking as paid
+      if (body.bookingId) {
+        let bookings = getStored("local_bookings_data", initialBookings);
+        bookings = bookings.map((b) => {
+          if (String(b.id) === String(body.bookingId)) {
+            return { ...b, paymentStatus: "paid", paymentMethod: newPayment.method, transactionId: newPayment.transactionId };
+          }
+          return b;
+        });
+        setStored("local_bookings_data", bookings);
+      }
+
       return newPayment;
     }
 
@@ -1112,6 +1140,37 @@ function getMockFallback(endpoint, options = {}) {
       };
     }
 
+    // USERS
+    if (path.startsWith("/users/")) {
+      const targetId = path.split("/")[2];
+      const usersList = Object.values(usersMap);
+      const userIndex = usersList.findIndex((u) => String(u.id) === String(targetId) || u.email === targetId);
+
+      if (method === "GET") {
+        if (userIndex >= 0) return usersList[userIndex];
+        if (currentUser && String(currentUser.id) === String(targetId)) return currentUser;
+        throw new Error("User not found");
+      }
+
+      if (method === "PUT") {
+        const existing = userIndex >= 0 ? usersList[userIndex] : (currentUser || {});
+        const updated = { ...existing, ...body };
+        if (updated.email) {
+          usersMap[updated.email.toLowerCase()] = updated;
+          setStored("local_mock_users", usersMap);
+        }
+        if (currentUser && (String(currentUser.id) === String(targetId) || currentUser.email === existing.email)) {
+          const newAuthUser = { ...currentUser, ...updated };
+          localStorage.setItem("auth_user", JSON.stringify(newAuthUser));
+        }
+        return updated;
+      }
+    }
+
+    if (path === "/users" && method === "GET") {
+      return Object.values(usersMap);
+    }
+
     // PAYOUTS
     if (path === "/payouts") {
       return { success: true };
@@ -1226,6 +1285,7 @@ export const reviewAPI = {
 // Payments
 export const paymentAPI = {
   getAll: () => request("/payments"),
+  getUpiConfig: () => request("/payments/upi-config"),
   create: (data) =>
     request("/payments", { method: "POST", body: JSON.stringify(data) }),
 };

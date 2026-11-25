@@ -60,6 +60,21 @@ const getBookingById = async (req, res) => {
   }
 }
 
+const parseSlotTime = (dateStr, timeSlot) => {
+  if (!dateStr || !timeSlot) return null
+  const startPart = timeSlot.split('-')[0].trim()
+  const match = startPart.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+  if (!match) return null
+  let hours = parseInt(match[1], 10)
+  const minutes = parseInt(match[2], 10)
+  const meridian = match[3].toUpperCase()
+  if (meridian === 'PM' && hours < 12) hours += 12
+  if (meridian === 'AM' && hours === 12) hours = 0
+
+  const [year, month, day] = dateStr.split('-').map(Number)
+  return new Date(year, month - 1, day, hours, minutes, 0, 0)
+}
+
 const createBooking = async (req, res) => {
   try {
     if (req.user.role !== 'customer') {
@@ -67,6 +82,18 @@ const createBooking = async (req, res) => {
     }
 
     const { serviceId, date, time, address, notes } = req.body
+    if (!date || !time) {
+      return res.status(400).json({ message: 'Invalid date and time: Both date and time are required.' })
+    }
+
+    const slotDate = parseSlotTime(date, time)
+    if (!slotDate || isNaN(slotDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid date or time format.' })
+    }
+    if (slotDate <= new Date()) {
+      return res.status(400).json({ message: 'Invalid date and time: You cannot select a past date or time.' })
+    }
+
     const service = await Service.findByPk(serviceId)
     if (!service || !service.isActive) {
       return res.status(404).json({ message: 'Service not found or unavailable' })
