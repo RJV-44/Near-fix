@@ -1,4 +1,5 @@
 import LogoutButton from '../../components/LogoutButton.jsx'
+import NotificationBell from '../../components/NotificationBell.jsx'
 import { useAuth } from '../../context/AuthContext'
 
 const navLinks = [
@@ -50,13 +51,13 @@ function CustomerLayout({ title, subtitle, children }) {
             {subtitle && <p>{subtitle}</p>}
           </div>
           <div className="dashboard-header-actions">
-            <a className="notification-button" href="#customer-notifications" aria-label="Notifications" title="Notifications">🔔</a>
+            <NotificationBell href="#customer-notifications" />
             <a className="secondary-button" href="#services" style={{ textDecoration: 'none', fontSize: '0.85rem' }}>🔍 Browse Services</a>
             <LogoutButton />
           </div>
         </header>
         <main className="dashboard-main">{children}</main>
-        <footer className="dashboard-footer">© 2026 LocalServices · <a href="#home" style={{ color: 'var(--brand)', textDecoration: 'none' }}>Back to Home</a></footer>
+        <footer className="dashboard-footer">© 2026 NEAr FiX · <a href="#home" style={{ color: 'var(--brand)', textDecoration: 'none' }}>Back to Home</a></footer>
       </div>
     </div>
   )

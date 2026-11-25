@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '../components/AdminLayout.jsx'
 import { bookingAPI } from '../../api.js'
+import { downloadCsv } from '../../utils/downloadCsv.js'
 
 function Bookings() {
   const [bookings, setBookings] = useState([])
@@ -13,9 +14,25 @@ function Bookings() {
       .finally(() => setLoading(false))
   }, [])
 
+  const exportBookings = () => downloadCsv(
+    'bookings.csv',
+    ['Booking ID', 'Customer', 'Customer email', 'Provider', 'Service', 'Date', 'Time', 'Amount', 'Status'],
+    bookings.map(booking => ({
+      'Booking ID': booking.id,
+      Customer: booking.customer?.name || 'N/A',
+      'Customer email': booking.customer?.email || 'N/A',
+      Provider: booking.provider?.businessName || booking.provider?.name || 'N/A',
+      Service: booking.service?.title || 'N/A',
+      Date: booking.date,
+      Time: booking.time,
+      Amount: Number(booking.totalPrice || 0).toFixed(2),
+      Status: booking.status || 'pending',
+    })),
+  )
+
   return <AdminLayout title="Bookings" subtitle="Track, update, and resolve customer bookings.">
     <section className="panel">
-      <div className="panel-heading"><div><h2>All bookings</h2><p>{bookings.length} bookings total</p></div><button className="secondary-button">Export</button></div>
+      <div className="panel-heading"><div><h2>All bookings</h2><p>{bookings.length} bookings total</p></div><button className="secondary-button" onClick={exportBookings} disabled={loading}>Export CSV</button></div>
       <div className="table-wrap"><table><thead><tr><th>#</th><th>Customer</th><th>Service</th><th>Date</th><th>Status</th></tr></thead><tbody>
         {loading ? <tr><td colSpan="5">Loading...</td></tr> :
          bookings.length === 0 ? <tr><td colSpan="5">No bookings found.</td></tr> :

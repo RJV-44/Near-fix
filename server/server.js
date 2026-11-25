@@ -44,6 +44,9 @@ app.use("/api/payments", require("./routes/paymentRoutes"));
 // Notifications
 app.use("/api/notifications", require("./routes/notificationRoutes"));
 
+// Contact messages
+app.use("/api/contact-messages", require("./routes/contactMessageRoutes"));
+
 // Favorites
 app.use("/api/favorites", require("./routes/favoriteRoutes"));
 

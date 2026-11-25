@@ -1,4 +1,5 @@
-const { Service, User, Category } = require('../models')
+const { Service, User, Category, Notification } = require('../models')
+const { sequelize } = require('../config/db')
 
 const getServices = async (req, res) => {
   try {
@@ -25,7 +26,35 @@ const getServiceById = async (req, res) => {
 const createService = async (req, res) => {
   try {
     const { title, category, categoryId, description, price, duration } = req.body
-    const service = await Service.create({ providerId: req.user.id, title, category, categoryId, description, price, duration })
+    let service
+    await sequelize.transaction(async (transaction) => {
+      service = await Service.create({
+        providerId: req.user.id,
+        title,
+        category,
+        categoryId,
+        description,
+        price,
+        duration,
+      }, { transaction })
+
+      const customers = await User.findAll({
+        where: { role: 'customer', isActive: true },
+        attributes: ['id'],
+        raw: true,
+        transaction,
+      })
+      if (customers.length) {
+        await Notification.bulkCreate(customers.map(customer => ({
+          userId: customer.id,
+          title: 'New service available',
+          message: `${req.user.businessName || req.user.name} added ${service.title}.`,
+          type: 'promotion',
+          relatedId: service.id,
+          relatedModel: 'Service',
+        })), { transaction })
+      }
+    })
     res.status(201).json(service)
   } catch (error) {
     res.status(500).json({ message: error.message })

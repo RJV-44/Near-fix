@@ -5,6 +5,6 @@ const { protect } = require('../middleware/auth')
 
 router.get('/', protect, getFavorites)
 router.post('/', protect, addFavorite)
-router.delete('/:providerId', protect, removeFavorite)
+router.delete('/:serviceId', protect, removeFavorite)
 
 module.exports = router

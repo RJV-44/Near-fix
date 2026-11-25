@@ -6,8 +6,8 @@ const {
   markAsRead,
   markAllAsRead,
   createNotification,
-  createContactMessage,
 } = require("../controllers/notificationController");
+const { createContactMessage } = require("../controllers/contactMessageController");
 const { protect, authorize } = require("../middleware/auth");
 
 router.get("/", protect, getNotifications);

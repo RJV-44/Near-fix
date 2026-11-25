@@ -25,7 +25,7 @@ function HowToUsePlatform() {
         <section className="how-to-hero">
           <p className="hero-eyebrow">HOW TO USE THE PLATFORM</p>
           <h1>Everything you need, in a few simple steps.</h1>
-          <p>Whether you need a hand or provide one, Local Services keeps the journey clear from first search to finished work.</p>
+          <p>Whether you need a hand or provide one, NEAr FiX keeps the journey clear from first search to finished work.</p>
         </section>
         <section className="public-section how-to-section">
           <div className="how-to-grid"><StepList title="For customers" steps={customerSteps} /><StepList title="For providers" steps={providerSteps} /></div>

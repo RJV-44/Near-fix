@@ -40,7 +40,7 @@ function ProviderRegister() {
       <form className="auth-card" onSubmit={handleSubmit}>
         <a href="#register" className="back-link">← Back to registration</a>
         <h1>Register as a provider</h1>
-        <p>Start offering your services on Local Services.</p>
+        <p>Start offering your services on NEAr FiX.</p>
         {error && <small className="form-error">{error}</small>}
         <label>Business name
           <input placeholder="Your business or trade name" value={form.businessName} onChange={e => setForm({...form, businessName: e.target.value})} required />

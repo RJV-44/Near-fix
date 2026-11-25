@@ -81,38 +81,10 @@ const createNotification = async (req, res) => {
   }
 };
 
-const createContactMessage = async (req, res) => {
-  try {
-    const { name, email, subject, message } = req.body;
-
-    if (!name || !email || !message) {
-      return res
-        .status(400)
-        .json({ message: "Name, email, and message are required" });
-    }
-
-    const admin = await User.findOne({ where: { role: "admin" } });
-    const notification = await Notification.create({
-      userId: admin ? admin.id : null,
-      title: `Contact: ${subject || "General enquiry"}`,
-      message: `From: ${name} (${email})\n\n${message}`,
-      type: "system",
-    });
-
-    res.status(201).json({
-      message: "Message sent successfully",
-      notification,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 module.exports = {
   getNotifications,
   getUnreadCount,
   markAsRead,
   markAllAsRead,
   createNotification,
-  createContactMessage,
 };

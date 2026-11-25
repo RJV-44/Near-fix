@@ -8,7 +8,7 @@ function Dashboard() {
 
   const dashboards = [
     ['Admin portal', 'Manage users, providers, bookings, and platform reports.', '#admin-dashboard', '🛡️'],
-    ['Customer portal', 'Manage your profile, bookings, payments, and favorite providers.', '#customer-dashboard', '👤'],
+    ['Customer portal', 'Manage your profile, bookings, payments, and saved services.', '#customer-dashboard', '👤'],
     ['Provider portal', 'Manage services, schedule, earnings, and customer reviews.', '#provider-dashboard', '🛠️'],
   ]
 
@@ -16,7 +16,7 @@ function Dashboard() {
     <main className="public-section dashboard-selector">
       <p className="hero-eyebrow">DASHBOARDS</p>
       <h1>Choose your portal</h1>
-      <p>Explore the role-specific pages created for Local Services.</p>
+      <p>Explore the role-specific pages created for NEAr FiX.</p>
       {isAuthenticated && <p className="form-success">Logged in as <strong>{user?.name}</strong> ({user?.role})</p>}
       <div className="portal-grid">
         {dashboards.map(([title, text, route, icon]) =>

@@ -45,7 +45,7 @@ function Dashboard() {
       <section className="stat-grid customer-stats" style={{ marginBottom: '1.75rem' }}>
         <StatCard icon="📅" label="Upcoming Bookings" value={upcoming.toString()} trend={upcoming > 0 ? 'Active' : undefined} color="#eff6ff" />
         <StatCard icon="✅" label="Completed Services" value={completed.toString()} color="#f0fdf4" />
-        <StatCard icon="❤️" label="Saved Providers" value={favorites.toString()} color="#fff1f2" />
+        <StatCard icon="❤️" label="Saved Services" value={favorites.toString()} color="#fff1f2" />
       </section>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
@@ -90,7 +90,7 @@ function Dashboard() {
             {[
               { icon: '🔍', label: 'Browse Services', sub: 'Find and book local pros', href: '#services', primary: true },
               { icon: '📋', label: 'My Bookings', sub: 'View all upcoming appointments', href: '#customer-bookings', primary: false },
-              { icon: '❤️', label: 'Saved Favorites', sub: 'Quickly rebook trusted providers', href: '#customer-favorites', primary: false },
+              { icon: '❤️', label: 'Wishlist', sub: 'Keep track of services you want to book', href: '#customer-favorites', primary: false },
               { icon: '💳', label: 'Payments', sub: 'View payment history', href: '#customer-payments', primary: false },
             ].map(({ icon, label, sub, href, primary }) => (
               <a key={href} href={href} style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', padding: '0.9rem', borderRadius: 'var(--radius)', border: '1.5px solid var(--border)', textDecoration: 'none', transition: 'all 0.2s', background: primary ? 'var(--brand-bg)' : 'var(--bg)' }}

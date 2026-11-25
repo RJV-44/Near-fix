@@ -5,6 +5,8 @@ const Review = require('./Review')
 const Payment = require('./Payment')
 const Notification = require('./Notification')
 const Favorite = require('./Favorite')
+const WishlistItem = require('./WishlistItem')
+const ContactMessage = require('./ContactMessage')
 const Category = require('./Category')
 const Payout = require('./Payout')
 
@@ -18,10 +20,13 @@ User.hasMany(Payment, { foreignKey: 'customerId', as: 'customerPayments' })
 User.hasMany(Payment, { foreignKey: 'providerId', as: 'providerPayments' })
 User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' })
 User.hasMany(Favorite, { foreignKey: 'customerId', as: 'favorites' })
+User.hasMany(WishlistItem, { foreignKey: 'customerId', as: 'wishlistItems' })
 User.hasMany(Payout, { foreignKey: 'providerId', as: 'payouts' })
 
 Service.belongsTo(Category, { foreignKey: 'categoryId', as: 'categoryRef' })
 Service.belongsTo(User, { foreignKey: 'providerId', as: 'provider' })
+Service.hasMany(WishlistItem, { foreignKey: 'serviceId', as: 'wishlistItems' })
+WishlistItem.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' })
 
 // Booking associations
 Booking.belongsTo(User, { foreignKey: 'customerId', as: 'customer' })
@@ -46,6 +51,7 @@ Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 // Favorite associations
 Favorite.belongsTo(User, { foreignKey: 'customerId', as: 'customer' })
 Favorite.belongsTo(User, { foreignKey: 'providerId', as: 'provider' })
+WishlistItem.belongsTo(User, { foreignKey: 'customerId', as: 'customer' })
 
 // Payout associations
 Payout.belongsTo(User, { foreignKey: 'providerId', as: 'provider' })
@@ -55,5 +61,5 @@ Category.hasMany(Service, { foreignKey: 'categoryId', as: 'services' })
 
 
 
-module.exports = { User, Service, Booking, Review, Payment, Notification, Favorite, Category, Payout }
+module.exports = { User, Service, Booking, Review, Payment, Notification, Favorite, WishlistItem, ContactMessage, Category, Payout }
 

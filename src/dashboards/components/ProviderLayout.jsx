@@ -1,4 +1,5 @@
 import LogoutButton from '../../components/LogoutButton.jsx'
+import NotificationBell from '../../components/NotificationBell.jsx'
 import { useAuth } from '../../context/AuthContext'
 
 const navLinks = [
@@ -51,13 +52,13 @@ function ProviderLayout({ title, subtitle, children }) {
             {subtitle && <p>{subtitle}</p>}
           </div>
           <div className="dashboard-header-actions">
-            <a className="notification-button" href="#provider-notifications" aria-label="Notifications" title="Notifications">🔔</a>
+            <NotificationBell href="#provider-notifications" />
             <a className="primary-button" href="#provider-add-service" style={{ textDecoration: 'none', fontSize: '0.85rem' }}>+ Add Service</a>
             <LogoutButton />
           </div>
         </header>
         <main className="dashboard-main">{children}</main>
-        <footer className="dashboard-footer">© 2026 LocalServices · <a href="#home" style={{ color: 'var(--brand)', textDecoration: 'none' }}>Back to Home</a></footer>
+        <footer className="dashboard-footer">© 2026 NEAr FiX · <a href="#home" style={{ color: 'var(--brand)', textDecoration: 'none' }}>Back to Home</a></footer>
       </div>
     </div>
   )

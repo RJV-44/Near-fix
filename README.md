@@ -140,6 +140,8 @@ Admin:
 
 - Email: admin@example.com
 - Password: admin123
+- To configure or reset the admin account, set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `server/.env`, then run `npm --prefix server run seed` from the repository root.
+- The seed command updates the configured admin account's password and reactivates it. Use a private password outside local development.
 
 Customer:
 

@@ -57,7 +57,7 @@ function Login() {
           {submitted ? 'Logging in...' : 'Log in'}
         </button>
         {submitted && !error && <small className="form-success">Logging you in as {role}...</small>}
-        <p className="auth-switch">New to Local Services? <a href="#register">Create an account</a></p>
+        <p className="auth-switch">New to NEAr FiX? <a href="#register">Create an account</a></p>
         <p className="auth-switch"><a href="#admin-login">Admin login →</a></p>
       </form>
     </main>

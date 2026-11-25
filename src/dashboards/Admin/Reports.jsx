@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '../components/AdminLayout.jsx'
 import { bookingAPI, paymentAPI, userAPI } from '../../api.js'
+import { downloadCsv } from '../../utils/downloadCsv.js'
 
 function Reports() {
   const [stats, setStats] = useState({ completion: 0, avgRating: 0, newUsers: 0, revenue: [] })
@@ -35,6 +36,10 @@ function Reports() {
 
   const months = ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
   const maxRev = Math.max(...stats.revenue, 1)
+  const exportReport = () => downloadCsv('revenue-report.csv', ['Month', 'Revenue'], months.map((month, index) => ({
+    Month: month,
+    Revenue: stats.revenue[index].toFixed(2),
+  })))
 
   return <AdminLayout title="Reports" subtitle="Understand platform growth, bookings, and revenue.">
     <section className="stat-grid compact">
@@ -43,7 +48,7 @@ function Reports() {
       <article className="stat-card"><p>New registrations</p><h2>{stats.newUsers}</h2><small className="positive">👥 Last 30 days</small></article>
     </section>
     <section className="panel">
-      <div className="panel-heading"><div><h2>Revenue overview</h2><p>Monthly revenue for the last six months.</p></div><button className="secondary-button">Export CSV</button></div>
+      <div className="panel-heading"><div><h2>Revenue overview</h2><p>Monthly revenue for the last six months.</p></div><button className="secondary-button" onClick={exportReport} disabled={loading}>Export CSV</button></div>
       <div className="bar-chart">{loading ? <p>Loading...</p> : months.map((month, i) => <div key={month}><span style={{height: `${(stats.revenue[i] / maxRev) * 100}%`}} /><small>{month}</small></div>)}</div>
     </section>
   </AdminLayout>

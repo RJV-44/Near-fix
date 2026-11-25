@@ -1,4 +1,4 @@
-function ServiceCard({ id, title, category, rating, reviews, price, image = '🛠️', description, duration, provider, onBook, onView }) {
+function ServiceCard({ id, title, category, rating, reviews, price, image = '🛠️', description, duration, provider, canFavorite = false, isFavorite = false, favoriteBusy = false, onToggleFavorite, onBook, onView }) {
   const handleView = onView || (() => { window.location.hash = `#service-details?id=${id}` })
   const handleBook = onBook || (() => { window.location.hash = `#booking?serviceId=${id}` })
   const imageIsUrl = typeof image === 'string' && image.startsWith('http')
@@ -15,6 +15,9 @@ function ServiceCard({ id, title, category, rating, reviews, price, image = '�
         <div className="service-card-footer">
           <strong className="service-price-tag">From {price}</strong>
           <div className="service-card-buttons">
+            {canFavorite && id && <button className={`wishlist-button${isFavorite ? ' is-saved' : ''}`} onClick={() => onToggleFavorite?.(id)} disabled={favoriteBusy} aria-pressed={isFavorite} aria-label={`${isFavorite ? 'Remove' : 'Add'} ${title} ${isFavorite ? 'from' : 'to'} wishlist`}>
+              {favoriteBusy ? 'Saving...' : isFavorite ? '♥ Saved' : '♡ Save'}
+            </button>}
             <button className="secondary-button-sm" onClick={handleView}>View</button>
             <button className="primary-button-sm" onClick={handleBook}>Book now</button>
           </div>

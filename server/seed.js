@@ -8,11 +8,19 @@ const seedUsers = async () => {
   try {
     await sequelize.sync();
 
+    const adminEmail = String(process.env.ADMIN_EMAIL || "admin@example.com")
+      .trim()
+      .toLowerCase();
+    const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+    if (adminPassword.length < 8) {
+      throw new Error("ADMIN_PASSWORD must be at least 8 characters long");
+    }
+
     const defaults = [
       {
         name: "Admin User",
-        email: "admin@example.com",
-        password: "admin123",
+        email: adminEmail,
+        password: adminPassword,
         role: "admin",
         phone: "1234567890",
       },
@@ -41,19 +49,23 @@ const seedUsers = async () => {
       if (!existing) {
         await User.create(item);
         created.push(item.email);
+      } else if (item.role === "admin") {
+        await existing.update({
+          ...item,
+          isActive: true,
+        });
+        created.push(item.email);
       }
     }
 
     if (created.length === 0) {
       console.log("Default users already exist; no seed changes needed.");
     } else {
-      console.log(
-        "Missing default users seeded successfully:",
-        created.join(", "),
-      );
+      console.log("Admin account configured and missing demo users seeded:", created.join(", "));
     }
 
-    console.log("  Admin:    admin@example.com / admin123");
+    console.log(`  Admin email: ${adminEmail}`);
+    console.log("  Admin password: configured (not displayed)");
     console.log("  Customer: customer@example.com / customer123");
     console.log("  Provider: provider@example.com / provider123");
     process.exit(0);

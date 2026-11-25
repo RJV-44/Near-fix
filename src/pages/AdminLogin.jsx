@@ -41,10 +41,10 @@ function AdminLogin() {
         <p>Sign in to manage platform operations.</p>
         {error && <small className="form-error">{error}</small>}
         <label>Admin email
-          <input type="email" placeholder="admin@localservices.com" value={email} onChange={e => setEmail(e.target.value)} required />
+          <input type="email" autoComplete="username" placeholder="admin@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
         </label>
         <label>Password
-          <input type="password" placeholder="Enter admin password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <input type="password" autoComplete="current-password" placeholder="Enter admin password" value={password} onChange={e => setPassword(e.target.value)} required />
         </label>
         <button className="primary-button admin-button" type="submit" disabled={submitted}>
           {submitted ? 'Signing in...' : 'Sign in as admin'}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '../components/AdminLayout.jsx'
 import { paymentAPI } from '../../api.js'
+import { downloadCsv } from '../../utils/downloadCsv.js'
 
 function Payments() {
   const [payments, setPayments] = useState([])
@@ -16,6 +17,19 @@ function Payments() {
   const totalRevenue = payments.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0)
   const pendingPayouts = payments.filter(p => p.status === 'pending').reduce((sum, p) => sum + parseFloat(p.amount || 0), 0)
   const refunded = payments.filter(p => p.status === 'refunded').reduce((sum, p) => sum + parseFloat(p.amount || 0), 0)
+  const exportPayments = () => downloadCsv(
+    'payments.csv',
+    ['Payment ID', 'Booking ID', 'Customer', 'Provider', 'Amount', 'Date', 'Status'],
+    payments.map(payment => ({
+      'Payment ID': payment.id,
+      'Booking ID': payment.bookingId || payment.booking?.id || 'N/A',
+      Customer: payment.customer?.name || 'N/A',
+      Provider: payment.provider?.businessName || payment.provider?.name || 'N/A',
+      Amount: Number(payment.amount || 0).toFixed(2),
+      Date: payment.paidAt ? new Date(payment.paidAt).toISOString() : payment.createdAt || '',
+      Status: payment.status || 'paid',
+    })),
+  )
 
   return <AdminLayout title="Payments" subtitle="Review payments, provider payouts, and refunds.">
     <section className="stat-grid compact">
@@ -24,7 +38,7 @@ function Payments() {
       <article className="stat-card"><p>Refunds issued</p><h2>₹{refunded.toFixed(2)}</h2></article>
     </section>
     <section className="panel">
-      <div className="panel-heading"><div><h2>Payment history</h2><p>{payments.length} transactions</p></div><button className="secondary-button">Download report</button></div>
+      <div className="panel-heading"><div><h2>Payment history</h2><p>{payments.length} transactions</p></div><button className="secondary-button" onClick={exportPayments} disabled={loading}>Export CSV</button></div>
       <div className="table-wrap"><table><thead><tr><th>#</th><th>Customer</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead><tbody>
         {loading ? <tr><td colSpan="5">Loading...</td></tr> :
          payments.length === 0 ? <tr><td colSpan="5">No payments yet.</td></tr> :

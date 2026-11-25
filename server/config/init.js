@@ -2,11 +2,25 @@
 
 const { sequelize } = require('./db')
 const { Category } = require('../models')
+const { DataTypes } = require('sequelize')
 
 const syncDatabase = async () => {
   try {
     // Sync all models to create tables
     await sequelize.sync({ alter: false })
+    const contactMessageTable = await sequelize.getQueryInterface().describeTable('ContactMessages')
+    if (!contactMessageTable.adminReply) {
+      await sequelize.getQueryInterface().addColumn('ContactMessages', 'adminReply', {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      })
+    }
+    if (!contactMessageTable.repliedAt) {
+      await sequelize.getQueryInterface().addColumn('ContactMessages', 'repliedAt', {
+        type: DataTypes.DATE,
+        allowNull: true,
+      })
+    }
     console.log('MySQL tables synchronized')
 
     // Seed default categories

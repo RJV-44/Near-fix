@@ -20,6 +20,7 @@ import AdminServices from './dashboards/Admin/Services.jsx'
 import AdminBookings from './dashboards/Admin/Bookings.jsx'
 import AdminPayments from './dashboards/Admin/Payments.jsx'
 import AdminReviews from './dashboards/Admin/Reviews.jsx'
+import AdminContactMessages from './dashboards/Admin/ContactMessages.jsx'
 import AdminReports from './dashboards/Admin/Reports.jsx'
 import AdminSettings from './dashboards/Admin/Settings.jsx'
 import AdminProfile from './dashboards/Admin/AdminProfile.jsx'
@@ -52,7 +53,7 @@ const publicRoutes = {
 const adminRoutes = {
   '#admin-dashboard': AdminDashboard, '#admin-users': AdminUsers, '#admin-providers': AdminProviders,
   '#admin-services': AdminServices, '#admin-bookings': AdminBookings, '#admin-payments': AdminPayments,
-  '#admin-reviews': AdminReviews, '#admin-reports': AdminReports, '#admin-settings': AdminSettings, '#admin-profile': AdminProfile,
+  '#admin-reviews': AdminReviews, '#admin-contact-messages': AdminContactMessages, '#admin-reports': AdminReports, '#admin-settings': AdminSettings, '#admin-profile': AdminProfile,
 }
 
 const customerRoutes = {

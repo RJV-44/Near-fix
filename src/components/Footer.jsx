@@ -2,7 +2,7 @@ function Footer() {
   return (
     <footer className="site-footer">
       <div>
-        <a className="site-brand" href="#home" style={{ fontSize: '1.4rem' }}>Local<span style={{ fontStyle: 'italic' }}>Services</span></a>
+        <a className="site-brand" href="#home" style={{ fontSize: '1.4rem' }}>NEAr <span style={{ fontStyle: 'italic' }}>FiX</span></a>
         <p>Trusted local professionals for every task — book with confidence.</p>
         <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>
           <span style={{ color: '#64748b', fontSize: '1.25rem', cursor: 'pointer' }}>🐦</span>
@@ -30,7 +30,7 @@ function Footer() {
         <a href="#contact">Report Issue</a>
         <a href="#admin-login">Admin Login</a>
       </div>
-      <small>© 2026 LocalServices · Built with ❤️ for local communities · <a href="#home" style={{ color: 'inherit' }}>Privacy Policy</a></small>
+      <small>© 2026 NEAr FiX · Built with ❤️ for local communities · <a href="#home" style={{ color: 'inherit' }}>Privacy Policy</a></small>
     </footer>
   )
 }

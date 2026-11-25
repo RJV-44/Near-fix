@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
-import { serviceAPI } from '../api.js'
+import { serviceAPI, favoriteAPI } from '../api.js'
+import { useAuth } from '../context/AuthContext'
 
 function ServiceDetails() {
+  const { isCustomer, user } = useAuth()
   const [service, setService] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [favoriteBusy, setFavoriteBusy] = useState(false)
+  const [wishlistError, setWishlistError] = useState('')
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.split('?')[1] || '')
@@ -25,6 +30,31 @@ function ServiceDetails() {
     }
     fetchService()
   }, [])
+
+  useEffect(() => {
+    if (!isCustomer || !service?.id) {
+      setIsFavorite(false)
+      return
+    }
+    favoriteAPI.getAll()
+      .then(favorites => setIsFavorite(favorites.some(favorite => String(favorite.serviceId || favorite.service?.id) === String(service.id))))
+      .catch(err => setWishlistError(`Could not load your wishlist: ${err.message}`))
+  }, [isCustomer, user?.id, service?.id])
+
+  const toggleFavorite = async () => {
+    if (!service?.id) return
+    setFavoriteBusy(true)
+    setWishlistError('')
+    try {
+      if (isFavorite) await favoriteAPI.remove(service.id)
+      else await favoriteAPI.add(service.id)
+      setIsFavorite(!isFavorite)
+    } catch (err) {
+      setWishlistError(`Could not update your wishlist: ${err.message}`)
+    } finally {
+      setFavoriteBusy(false)
+    }
+  }
 
   if (loading) return <div className="public-page"><Navbar /><main className="public-section details-page"><p>Loading service details...</p></main><Footer /></div>
   if (error) return <div className="public-page"><Navbar /><main className="public-section details-page"><p className="form-error">{error}</p><a className="back-link" href="#services">← All services</a></main><Footer /></div>
@@ -47,6 +77,12 @@ function ServiceDetails() {
             <strong>From ₹{parseFloat(service.price).toFixed(2)}</strong>
             {service.duration && <span>Estimated duration: {service.duration}</span>}
           </div>
+          {isCustomer && <div className="details-wishlist">
+            <button className={`wishlist-button${isFavorite ? ' is-saved' : ''}`} onClick={toggleFavorite} disabled={favoriteBusy} aria-pressed={isFavorite}>
+              {favoriteBusy ? 'Saving...' : isFavorite ? '♥ Saved to wishlist' : '♡ Add service to wishlist'}
+            </button>
+            {wishlistError && <p className="form-error" role="alert">{wishlistError}</p>}
+          </div>}
           <a className="primary-button" href={`#booking?serviceId=${service.id}`} style={{ display: 'inline-block', padding: '0.75rem 1.5rem', textDecoration: 'none' }}>Book this service now</a>
         </div>
       </div>

@@ -67,7 +67,7 @@ function Profile() {
             <div className="profile-form-actions"><button className="primary-button" type="submit" disabled={saving}>{saving ? 'Saving...' : 'Save changes'}</button></div>
           </form>
         </section>
-        <aside className="panel profile-summary-card"><p className="profile-kicker">ACCOUNT OVERVIEW</p><h2>Your Local Services account</h2><table className="profile-details-table"><tbody><tr><th>Bookings</th><td>Manage from dashboard</td></tr><tr><th>Notifications</th><td>Stay up to date</td></tr><tr><th>Member since</th><td>{memberSince}</td></tr></tbody></table><a className="secondary-button" href="#customer-settings">Open settings</a></aside>
+        <aside className="panel profile-summary-card"><p className="profile-kicker">ACCOUNT OVERVIEW</p><h2>Your NEAr FiX account</h2><table className="profile-details-table"><tbody><tr><th>Bookings</th><td>Manage from dashboard</td></tr><tr><th>Notifications</th><td>Stay up to date</td></tr><tr><th>Member since</th><td>{memberSince}</td></tr></tbody></table><a className="secondary-button" href="#customer-settings">Open settings</a></aside>
       </div>
     </div>
   </CustomerLayout>
