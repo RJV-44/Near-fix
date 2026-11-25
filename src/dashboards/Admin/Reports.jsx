@@ -38,9 +38,9 @@ function Reports() {
 
   return <AdminLayout title="Reports" subtitle="Understand platform growth, bookings, and revenue.">
     <section className="stat-grid compact">
-      <article className="stat-card"><p>Booking completion</p><h2>{stats.completion}%</h2><small className="positive">? Platform average</small></article>
-      <article className="stat-card"><p>Average rating</p><h2>{stats.avgRating} / 5</h2><small className="positive">? Across all services</small></article>
-      <article className="stat-card"><p>New registrations</p><h2>{stats.newUsers}</h2><small className="positive">? Last 30 days</small></article>
+      <article className="stat-card"><p>Booking completion</p><h2>{stats.completion}%</h2><small className="positive">📈 Platform average</small></article>
+      <article className="stat-card"><p>Average rating</p><h2>{stats.avgRating} / 5</h2><small className="positive">⭐ Across all services</small></article>
+      <article className="stat-card"><p>New registrations</p><h2>{stats.newUsers}</h2><small className="positive">👥 Last 30 days</small></article>
     </section>
     <section className="panel">
       <div className="panel-heading"><div><h2>Revenue overview</h2><p>Monthly revenue for the last six months.</p></div><button className="secondary-button">Export CSV</button></div>

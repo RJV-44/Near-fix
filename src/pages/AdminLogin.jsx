@@ -35,8 +35,8 @@ function AdminLogin() {
   return <div className="public-page"><Navbar />
     <main className="auth-page">
       <form className="auth-card admin-auth-card" onSubmit={handleSubmit}>
-        <a href="#home" className="back-link">? Back to home</a>
-        <div className="admin-badge">? Admin</div>
+        <a href="#home" className="back-link">← Back to home</a>
+        <div className="admin-badge">🛡️ Admin</div>
         <h1>Admin login</h1>
         <p>Sign in to manage platform operations.</p>
         {error && <small className="form-error">{error}</small>}
